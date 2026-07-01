@@ -8,6 +8,10 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'assets/*.png'],
+      workbox: {
+        cacheId: 'althikr-app',
+        cleanupOutdatedCaches: true,
+      },
       manifest: {
         name: 'الذكر الحكيم - تطبيق القرآن الكريم',
         short_name: 'الذكر الحكيم',

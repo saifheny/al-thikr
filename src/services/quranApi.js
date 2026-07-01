@@ -178,12 +178,12 @@ export async function fetchAyahTafsir(ayahNumber) {
 }
 
 /* ── Offline Caching Service (Cache API) ── */
-const AUDIO_CACHE_NAME = 'quran-audio-offline-cache';
+const CACHE_NAME = 'althikr-audio-cache-v1';
 
 export async function checkSurahCached(ayahs) {
   if (!ayahs || ayahs.length === 0) return false;
   try {
-    const cache = await caches.open(AUDIO_CACHE_NAME);
+    const cache = await caches.open(CACHE_NAME);
     const audioAyahs = ayahs.filter(a => a.audio);
     if (audioAyahs.length === 0) return false;
     for (const ayah of audioAyahs) {
@@ -199,7 +199,7 @@ export async function checkSurahCached(ayahs) {
 export async function getCachedAudioUrl(audioUrl) {
   if (!audioUrl) return '';
   try {
-    const cache = await caches.open(AUDIO_CACHE_NAME);
+    const cache = await caches.open(CACHE_NAME);
     const cachedResponse = await cache.match(audioUrl);
     if (cachedResponse) {
       const blob = await cachedResponse.blob();
@@ -213,7 +213,7 @@ export async function getCachedAudioUrl(audioUrl) {
 
 export async function cacheSurahAudio(ayahs, onProgress) {
   try {
-    const cache = await caches.open(AUDIO_CACHE_NAME);
+    const cache = await caches.open(CACHE_NAME);
     const audioAyahs = ayahs.filter(a => a.audio);
     const total = audioAyahs.length;
     if (total === 0) return true;
