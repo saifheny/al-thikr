@@ -291,7 +291,7 @@ export default function App() {
             </ul>
           </div>
           <div className="sidebar-bottom-actions" style={{ padding: '1rem 0', textAlign: 'center', opacity: 0.5, fontSize: '0.8rem' }}>
-            <span>الذكر الحكيم © 2024</span>
+            <span>تابع لمؤسسة SA 2026</span>
           </div>
         </nav>
       )}
