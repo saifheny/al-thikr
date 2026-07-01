@@ -8,7 +8,7 @@ import Reader from './components/Reader';
 import StatsTracker from './components/StatsTracker';
 import PrayersPage from './components/PrayersPage';
 import HadithPage from './components/HadithPage';
-import AzkarPage from './components/AzkarPage';
+
 
 export default function App() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -310,11 +310,11 @@ export default function App() {
               <span className="logo-text">الذكر الحكيم</span>
             </div>
             <ul className="sidebar-nav">
-              <li className={tab === 'reciters' ? 'active' : ''} onClick={() => { setTab('reciters'); setSheetOpen(false); }}><Users size={18} /> القراء</li>
-              <li className={tab === 'dashboard' ? 'active' : ''} onClick={() => { setTab('dashboard'); setSheetOpen(false); }}><List size={18} /> السور</li>
-              <li className={tab === 'prayers' ? 'active' : ''} onClick={() => { setTab('prayers'); setSheetOpen(false); }}><Clock size={18} /> الصلاة والقبلة</li>
-              <li className={tab === 'hadith' ? 'active' : ''} onClick={() => { setTab('hadith'); setSheetOpen(false); }}><BookOpen size={18} /> أحاديث النبي</li>
-              <li className={tab === 'azkar' ? 'active' : ''} onClick={() => { setTab('azkar'); setSheetOpen(false); }}><Bell size={18} /> الأذكار</li>
+              {navItems.map(n => (
+                <li key={n.key} className={tab === n.key ? 'active' : ''} onClick={() => { setTab(n.key); setSheetOpen(false); }}>
+                  <n.icon size={18} /> {n.label}
+                </li>
+              ))}
             </ul>
           </div>
           <div className="sidebar-bottom-actions" style={{ padding: '1rem 0', textAlign: 'center', opacity: 0.5, fontSize: '0.8rem' }}>
@@ -388,23 +388,23 @@ export default function App() {
       {/* Mobile Bottom Nav */}
       {isMobile && (
         <nav className="mobile-bottom-nav">
-          <button className={`mob-nav-btn ${tab === 'reciters' ? 'active' : ''}`} onClick={() => setTab('reciters')} title="القراء">
-            <div className={`mob-nav-bubble ${tab === 'reciters' ? 'active' : ''}`}><Users size={20} /></div>
-          </button>
-          <button className={`mob-nav-btn ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')} title="السور">
-            <div className={`mob-nav-bubble ${tab === 'dashboard' ? 'active' : ''}`}><List size={20} /></div>
-          </button>
-          <button className={`mob-nav-btn ${tab === 'prayers' ? 'active' : ''}`} onClick={() => setTab('prayers')} title="الصلاة والقبلة">
-            <div className={`mob-nav-bubble ${tab === 'prayers' ? 'active' : ''}`}><Clock size={20} /></div>
-          </button>
-          <button className={`mob-nav-btn ${tab === 'hadith' ? 'active' : ''}`} onClick={() => setTab('hadith')} title="الأحاديث">
-            <div className={`mob-nav-bubble ${tab === 'hadith' ? 'active' : ''}`}><BookOpen size={20} /></div>
-          </button>
-          <button className={`mob-nav-btn ${tab === 'azkar' ? 'active' : ''}`} onClick={() => setTab('azkar')} title="الأذكار">
-            <div className={`mob-nav-bubble ${tab === 'azkar' ? 'active' : ''}`}><Bell size={20} /></div>
-          </button>
+          {navItems.map(n => {
+            const active = tab === n.key;
+            return (
+              <button key={n.key} className={`mob-nav-btn ${active ? 'active' : ''}`} onClick={() => setTab(n.key)} title={n.label}>
+                <div className={`mob-nav-bubble ${active ? 'active' : ''}`}>
+                  <n.icon size={20} />
+                </div>
+              </button>
+            );
+          })}
         </nav>
       )}
+
+      {/* Floating Hadith Button */}
+      <button className="floating-hadith-btn" onClick={() => setTab('hadith')} title="الأربعون النووية">
+        <BookOpen size={24} />
+      </button>
 
       {/* Tafsir Modal */}
       {tafsirData && (
