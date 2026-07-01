@@ -3,7 +3,7 @@ export const RECITERS = [
     id: 'ar.alafasy',
     name: 'مشاري راشد العفاسي',
     englishName: 'Mishary Alafasy',
-    avatar: '/assets/avatar_alafasy.png',
+    avatar: './assets/avatar_alafasy.png',
     style: 'Murattal',
     avatarConfig: { bg: '#1a472a', skin: '#c68642', beard: '#2c1810', turbanColor: '#ffffff', turbanType: 'ghutra' }
   },
@@ -11,7 +11,7 @@ export const RECITERS = [
     id: 'ar.abdulsamad',
     name: 'عبد الباسط عبد الصمد',
     englishName: 'Abdul Basit (Mujawwad)',
-    avatar: '/assets/avatar_basit.png',
+    avatar: './assets/avatar_basit.png',
     style: 'Mujawwad',
     avatarConfig: { bg: '#4a1942', skin: '#8d5524', beard: '#1a0a00', turbanColor: '#f5f0e8', turbanType: 'imama' }
   },
@@ -19,7 +19,7 @@ export const RECITERS = [
     id: 'ar.abdulbasitmurattal',
     name: 'عبد الباسط المرتل',
     englishName: 'Abdul Basit (Murattal)',
-    avatar: '/assets/avatar_basit.png',
+    avatar: './assets/avatar_basit.png',
     style: 'Murattal',
     avatarConfig: { bg: '#1b3a6b', skin: '#8d5524', beard: '#1a0a00', turbanColor: '#e8f0ff', turbanType: 'kufi' }
   },
@@ -27,7 +27,7 @@ export const RECITERS = [
     id: 'ar.husary',
     name: 'محمود خليل الحصري',
     englishName: 'Al-Husary',
-    avatar: '/assets/avatar_husary.png',
+    avatar: './assets/avatar_husary.png',
     style: 'Murattal',
     avatarConfig: { bg: '#0d2b1a', skin: '#c68642', beard: '#888888', turbanColor: '#ffffff', turbanType: 'imama' }
   },
@@ -35,7 +35,7 @@ export const RECITERS = [
     id: 'ar.husarymujawwad',
     name: 'الحصري (المجود)',
     englishName: 'Al-Husary Mujawwad',
-    avatar: '/assets/avatar_husary_mujawwad.png',
+    avatar: './assets/avatar_husary_mujawwad.png',
     style: 'Mujawwad',
     avatarConfig: { bg: '#145a32', skin: '#c68642', beard: '#cccccc', turbanColor: '#f0f0f0', turbanType: 'kufi' }
   },
@@ -43,7 +43,7 @@ export const RECITERS = [
     id: 'ar.minshawi',
     name: 'محمد صديق المنشاوي',
     englishName: 'El-Minshawi',
-    avatar: '/assets/avatar_minshawi.png',
+    avatar: './assets/avatar_minshawi.png',
     style: 'Murattal',
     avatarConfig: { bg: '#7b241c', skin: '#a0522d', beard: '#3c1810', turbanColor: '#ffffff', turbanType: 'imama' }
   },
@@ -51,7 +51,7 @@ export const RECITERS = [
     id: 'ar.minshawimujawwad',
     name: 'المنشاوي (المجود)',
     englishName: 'El-Minshawi Mujawwad',
-    avatar: '/assets/avatar_minshawi_mujawwad.png',
+    avatar: './assets/avatar_minshawi_mujawwad.png',
     style: 'Mujawwad',
     avatarConfig: { bg: '#922b21', skin: '#a0522d', beard: '#5a2a1a', turbanColor: '#fffaed', turbanType: 'ghutra' }
   },
@@ -59,7 +59,7 @@ export const RECITERS = [
     id: 'ar.muhammadjibreel',
     name: 'محمد جبريل',
     englishName: 'Muhammad Jibreel',
-    avatar: '/assets/avatar_jibreel.png',
+    avatar: './assets/avatar_jibreel.png',
     style: 'Murattal',
     avatarConfig: { bg: '#0e6655', skin: '#c68642', beard: '#2c1810', turbanColor: '#e8f8f5', turbanType: 'ghutra' }
   },
@@ -67,7 +67,7 @@ export const RECITERS = [
     id: 'ar.mahermuaiqly',
     name: 'ماهر المعيقلي',
     englishName: 'Maher Al-Muaiqly',
-    avatar: '/assets/avatar_muaiqly.png',
+    avatar: './assets/avatar_muaiqly.png',
     style: 'Murattal',
     avatarConfig: { bg: '#196f3d', skin: '#f0c08a', beard: '#2c1810', turbanColor: '#ffffff', turbanType: 'shemagh_rw' }
   },
@@ -75,7 +75,7 @@ export const RECITERS = [
     id: 'ar.abdurrahmaansudais',
     name: 'عبدالرحمن السديس',
     englishName: 'Abdurrahmaan As-Sudais',
-    avatar: '/assets/avatar_sudais.png',
+    avatar: './assets/avatar_sudais.png',
     style: 'Murattal',
     avatarConfig: { bg: '#4a235a', skin: '#c68642', beard: '#bbbbbb', turbanColor: '#ffffff', turbanType: 'kufi' }
   },
@@ -83,7 +83,7 @@ export const RECITERS = [
     id: 'ar.saoodshuraym',
     name: 'سعود الشريم',
     englishName: "Sa'ud Ash-Shuraym",
-    avatar: '/assets/avatar_shuraym.png',
+    avatar: './assets/avatar_shuraym.png',
     style: 'Murattal',
     avatarConfig: { bg: '#2e7d32', skin: '#d4a574', beard: '#2c1810', turbanColor: '#ffffff', turbanType: 'shemagh_rw' }
   },
@@ -91,7 +91,7 @@ export const RECITERS = [
     id: 'ar.shaatree',
     name: 'أبو بكر الشاطري',
     englishName: 'Abu Bakr Ash-Shatri',
-    avatar: '/assets/avatar_shatri.png',
+    avatar: './assets/avatar_shatri.png',
     style: 'Murattal',
     avatarConfig: { bg: '#1565c0', skin: '#e8c49a', beard: '#3c2415', turbanColor: '#f0f8ff', turbanType: 'imama' }
   },
@@ -99,7 +99,7 @@ export const RECITERS = [
     id: 'ar.ahmedajamy',
     name: 'أحمد بن علي العجمي',
     englishName: 'Ahmed Al-Ajamy',
-    avatar: '/assets/avatar_ajamy.png',
+    avatar: './assets/avatar_ajamy.png',
     style: 'Murattal',
     avatarConfig: { bg: '#e65100', skin: '#c68642', beard: '#2c1810', turbanColor: '#fff8e1', turbanType: 'kufi' }
   },
@@ -107,7 +107,7 @@ export const RECITERS = [
     id: 'ar.hanirifai',
     name: 'هاني الرفاعي',
     englishName: 'Hani Ar-Rifai',
-    avatar: '/assets/avatar_rifai.png',
+    avatar: './assets/avatar_rifai.png',
     style: 'Murattal',
     avatarConfig: { bg: '#880e4f', skin: '#f5cba7', beard: '#1a0a00', turbanColor: '#ffffff', turbanType: 'ghutra' }
   },
@@ -115,7 +115,7 @@ export const RECITERS = [
     id: 'ar.hudhaify',
     name: 'علي الحذيفي',
     englishName: 'Ali Al-Hudhaify',
-    avatar: '/assets/avatar_hudhaify.png',
+    avatar: './assets/avatar_hudhaify.png',
     style: 'Murattal',
     avatarConfig: { bg: '#1a237e', skin: '#c68642', beard: '#dddddd', turbanColor: '#ffffff', turbanType: 'kufi' }
   },
@@ -123,7 +123,7 @@ export const RECITERS = [
     id: 'ar.ibrahimakhbar',
     name: 'إبراهيم الأخضر',
     englishName: 'Ibrahim Al-Akhdar',
-    avatar: '/assets/avatar_ibrahim_akhdar.png',
+    avatar: './assets/avatar_ibrahim_akhdar.png',
     style: 'Murattal',
     avatarConfig: { bg: '#33691e', skin: '#8d5524', beard: '#4a3728', turbanColor: '#e8f5e9', turbanType: 'kufi' }
   },
@@ -131,7 +131,7 @@ export const RECITERS = [
     id: 'ar.muhammadayyoub',
     name: 'محمد أيوب',
     englishName: 'Muhammad Ayyoub',
-    avatar: '/assets/avatar_muhammad_ayyoub.png',
+    avatar: './assets/avatar_muhammad_ayyoub.png',
     style: 'Murattal',
     avatarConfig: { bg: '#0a1628', skin: '#c68642', beard: '#1a0a00', turbanColor: '#e8e8ff', turbanType: 'imama' }
   },
@@ -139,7 +139,7 @@ export const RECITERS = [
     id: 'ar.yasseraldosari',
     name: 'ياسر الدوسري',
     englishName: 'Yasser Al-Dosari',
-    avatar: '/assets/avatar_dosari.png',
+    avatar: './assets/avatar_dosari.png',
     style: 'Murattal',
     avatarConfig: { bg: '#0d3b6b', skin: '#f0c08a', beard: '#2c1810', turbanColor: '#ffffff', turbanType: 'shemagh_rw' }
   }
