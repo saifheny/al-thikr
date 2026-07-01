@@ -403,7 +403,8 @@ export default function App() {
 
       {/* Floating Hadith Button */}
       <button className="floating-hadith-btn" onClick={() => setTab('hadith')} title="الأربعون النووية">
-        <BookOpen size={24} />
+        <BookOpen size={18} />
+        <span>الأحاديث</span>
       </button>
 
       {/* Tafsir Modal */}
