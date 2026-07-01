@@ -12,14 +12,13 @@
 - **اتجاه القبلة**: بوصلة دقيقة لتحديد اتجاه القبلة.
 - **التشغيل بدون إنترنت (Offline)**: حمّل السور المفضلة لديك واستمع لها في أي وقت.
 
-## 🚀 التقنيات المستخدمة (Tech Stack)
+التقنيات المستخدمة (Tech Stack)
 
 - React.js & Vite
 - Vanilla CSS 
 - Quran API & Aladhan API
-
+- 
 ## 🛠️ كيفية التشغيل (How to run locally)
-
 1. 
 pm install
 2. 
