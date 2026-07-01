@@ -7,11 +7,12 @@ import Player from './components/Player';
 import Reader from './components/Reader';
 import StatsTracker from './components/StatsTracker';
 import PrayersPage from './components/PrayersPage';
-
-/* ── Mushaf SVG favicon ── */
-const MUSHAF_FAVICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#3b5444"/><rect x="14.5" y="5" width="3" height="22" rx="1" fill="#7da28a"/><path d="M14.5 6 C14.5 6 7 7.5 5.5 10 L5.5 24 C7 21.5 14.5 23 14.5 23 Z" fill="#e8f0eb" stroke="#7da28a" stroke-width="0.8"/><path d="M17.5 6 C17.5 6 25 7.5 26.5 10 L26.5 24 C25 21.5 17.5 23 17.5 23 Z" fill="#e8f0eb" stroke="#7da28a" stroke-width="0.8"/><line x1="7.5" y1="13" x2="13" y2="12" stroke="#7da28a" stroke-width="0.9" stroke-linecap="round"/><line x1="7.5" y1="16" x2="13" y2="15" stroke="#7da28a" stroke-width="0.9" stroke-linecap="round"/><line x1="7.5" y1="19" x2="13" y2="18" stroke="#7da28a" stroke-width="0.9" stroke-linecap="round"/><line x1="19" y1="12" x2="24.5" y2="13" stroke="#7da28a" stroke-width="0.9" stroke-linecap="round"/><line x1="19" y1="15" x2="24.5" y2="16" stroke="#7da28a" stroke-width="0.9" stroke-linecap="round"/><line x1="19" y1="18" x2="24.5" y2="19" stroke="#7da28a" stroke-width="0.9" stroke-linecap="round"/></svg>`;
+import HadithPage from './components/HadithPage';
+import AzkarPage from './components/AzkarPage';
 
 export default function App() {
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [tab, setTab] = useState('reciters');
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState('');
@@ -45,17 +46,29 @@ export default function App() {
   const audioRef = useRef(new Audio());
   const notifTimer = useRef(null);
 
-  // Set Mushaf favicon
   useEffect(() => {
-    const svg = encodeURIComponent(MUSHAF_FAVICON);
-    const link = document.querySelector("link[rel~='icon']") || document.createElement('link');
-    link.rel = 'icon';
-    link.href = `data:image/svg+xml,${svg}`;
-    document.head.appendChild(link);
-    document.title = 'الذكر الحكيم';
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallPrompt(true);
+    };
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
   }, []);
 
+  const handleInstallApp = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+        setShowInstallPrompt(false);
+      }
+    }
+  };
+
   useEffect(() => {
+    document.title = 'الذكر الحكيم - تطبيق القرآن الكريم';
     document.documentElement.dir = 'rtl';
     document.documentElement.lang = 'ar';
   }, []);
@@ -272,6 +285,21 @@ export default function App() {
 
   return (
     <div className="app-container">
+      {showInstallPrompt && (
+        <div className="install-prompt-banner">
+          <div className="install-prompt-content">
+            <img src="/al-thikr/custom-icon.jpg" alt="Icon" className="install-icon" />
+            <div className="install-text">
+              <h4>الذكر الحكيم</h4>
+              <p>قم بتثبيت التطبيق للوصول السريع بدون إنترنت</p>
+            </div>
+          </div>
+          <div className="install-actions">
+            <button className="btn-install" onClick={handleInstallApp}>تثبيت</button>
+            <button className="btn-dismiss" onClick={() => setShowInstallPrompt(false)}><X size={18} /></button>
+          </div>
+        </div>
+      )}
 
       {/* Desktop Sidebar */}
       {!isMobile && (
@@ -281,13 +309,12 @@ export default function App() {
               <div className="logo-icon"><MushafIcon /></div>
               <span className="logo-text">الذكر الحكيم</span>
             </div>
-            <ul className="nav-links">
-              {navItems.map(n => (
-                <li key={n.key} className={`nav-item ${tab === n.key ? 'active' : ''}`} onClick={() => setTab(n.key)}>
-                  <n.icon size={19} />
-                  <span>{n.label}</span>
-                </li>
-              ))}
+            <ul className="sidebar-nav">
+              <li className={tab === 'reciters' ? 'active' : ''} onClick={() => { setTab('reciters'); setSheetOpen(false); }}><Users size={18} /> القراء</li>
+              <li className={tab === 'dashboard' ? 'active' : ''} onClick={() => { setTab('dashboard'); setSheetOpen(false); }}><List size={18} /> السور</li>
+              <li className={tab === 'prayers' ? 'active' : ''} onClick={() => { setTab('prayers'); setSheetOpen(false); }}><Clock size={18} /> الصلاة والقبلة</li>
+              <li className={tab === 'hadith' ? 'active' : ''} onClick={() => { setTab('hadith'); setSheetOpen(false); }}><BookOpen size={18} /> أحاديث النبي</li>
+              <li className={tab === 'azkar' ? 'active' : ''} onClick={() => { setTab('azkar'); setSheetOpen(false); }}><Bell size={18} /> الأذكار</li>
             </ul>
           </div>
           <div className="sidebar-bottom-actions" style={{ padding: '1rem 0', textAlign: 'center', opacity: 0.5, fontSize: '0.8rem' }}>
@@ -308,6 +335,9 @@ export default function App() {
         {tab === 'dashboard' && (
           <Dashboard surahs={surahs} activeSurah={activeSurah} activeReciter={activeReciter} onSelectSurah={handleSelectSurah} pinnedSurahs={pinnedSurahs} onTogglePinSurah={handleTogglePinSurah} favorites={favorites} setTab={setTab} onPlayRadio={() => { if(isPlaying) handlePlayPause(); }} />
         )}
+
+        {tab === 'hadith' && <HadithPage />}
+        {tab === 'azkar' && <AzkarPage />}
 
         {tab === 'player' && (
           <div className="quran-workspace">
@@ -358,16 +388,21 @@ export default function App() {
       {/* Mobile Bottom Nav */}
       {isMobile && (
         <nav className="mobile-bottom-nav">
-          {navItems.map(n => {
-            const active = tab === n.key;
-            return (
-              <button key={n.key} className={`mob-nav-btn ${active ? 'active' : ''}`} onClick={() => setTab(n.key)} title={n.label}>
-                <div className={`mob-nav-bubble ${active ? 'active' : ''}`}>
-                  <n.icon size={20} />
-                </div>
-              </button>
-            );
-          })}
+          <button className={`mob-nav-btn ${tab === 'reciters' ? 'active' : ''}`} onClick={() => setTab('reciters')} title="القراء">
+            <div className={`mob-nav-bubble ${tab === 'reciters' ? 'active' : ''}`}><Users size={20} /></div>
+          </button>
+          <button className={`mob-nav-btn ${tab === 'dashboard' ? 'active' : ''}`} onClick={() => setTab('dashboard')} title="السور">
+            <div className={`mob-nav-bubble ${tab === 'dashboard' ? 'active' : ''}`}><List size={20} /></div>
+          </button>
+          <button className={`mob-nav-btn ${tab === 'prayers' ? 'active' : ''}`} onClick={() => setTab('prayers')} title="الصلاة والقبلة">
+            <div className={`mob-nav-bubble ${tab === 'prayers' ? 'active' : ''}`}><Clock size={20} /></div>
+          </button>
+          <button className={`mob-nav-btn ${tab === 'hadith' ? 'active' : ''}`} onClick={() => setTab('hadith')} title="الأحاديث">
+            <div className={`mob-nav-bubble ${tab === 'hadith' ? 'active' : ''}`}><BookOpen size={20} /></div>
+          </button>
+          <button className={`mob-nav-btn ${tab === 'azkar' ? 'active' : ''}`} onClick={() => setTab('azkar')} title="الأذكار">
+            <div className={`mob-nav-bubble ${tab === 'azkar' ? 'active' : ''}`}><Bell size={20} /></div>
+          </button>
         </nav>
       )}
 

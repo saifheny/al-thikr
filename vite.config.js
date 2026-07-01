@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'assets/*.png'],
+      includeAssets: ['custom-icon.jpg', 'assets/*.png'],
       workbox: {
         cacheId: 'althikr-app',
         cleanupOutdatedCaches: true,
@@ -26,15 +26,15 @@ export default defineConfig({
         lang: 'ar',
         icons: [
           {
-            src: 'favicon.svg',
+            src: 'custom-icon.jpg',
             sizes: '192x192',
-            type: 'image/svg+xml',
+            type: 'image/jpeg',
             purpose: 'any maskable'
           },
           {
-            src: 'favicon.svg',
+            src: 'custom-icon.jpg',
             sizes: '512x512',
-            type: 'image/svg+xml',
+            type: 'image/jpeg',
             purpose: 'any maskable'
           }
         ]

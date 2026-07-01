@@ -1048,3 +1048,322 @@ button:hover svg.lucide,
   font-family: var(--font);
   line-height: 2;
 }
+/* -- PWA Install Prompt Banner -- */
+.install-prompt-banner {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  width: 90%;
+  max-width: 400px;
+  animation: slideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translate(-50%, -20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.install-prompt-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.install-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+}
+
+.install-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.install-text h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.install-text p {
+  margin: 2px 0 0;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.install-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-install {
+  background: var(--sage);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-install:hover {
+  background: var(--sage-dark);
+}
+
+.btn-dismiss {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.btn-dismiss:hover {
+  background: rgba(0,0,0,0.05);
+  color: var(--text);
+}
+/* -- Hadith Page -- */
+.hadith-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.hadith-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.hadith-header .title-wrapper h2 {
+  font-family: 'Amiri', serif;
+  color: var(--text);
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+.hadith-header .subtitle {
+  color: var(--sage);
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.hadith-book-view {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hadith-number-badge {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--sage);
+  color: white;
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(125, 162, 138, 0.3);
+}
+
+.hadith-text-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hadith-arabic-text {
+  font-family: 'Amiri', serif;
+  font-size: 1.8rem;
+  line-height: 2.2;
+  color: var(--text);
+}
+
+.hadith-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.hadith-controls .nav-btn {
+  background: var(--bg-hover);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--sage);
+  transition: all 0.2s;
+}
+
+.hadith-controls .nav-btn:hover:not(:disabled) {
+  background: var(--sage);
+  color: white;
+}
+
+.hadith-controls .nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.hadith-controls .page-indicator {
+  font-weight: bold;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+/* -- Azkar Page -- */
+.azkar-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.azkar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.azkar-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.azkar-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--sage);
+  box-shadow: 0 8px 20px rgba(125, 162, 138, 0.15);
+}
+
+.azkar-card h3 {
+  margin: 0 0 10px 0;
+  color: var(--text);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.azkar-card p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.zikr-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--border);
+}
+
+.zikr-counter-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.zikr-counter-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+.counter-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(125, 162, 138, 0.2);
+  transition: all 0.2s;
+}
+
+.zikr-counter-btn:hover .counter-circle {
+  transform: scale(1.05);
+  background: var(--sage);
+}
+
+.zikr-counter-btn:hover .count-num {
+  color: white;
+}
+
+.count-num {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--sage);
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.2s;
+}
+
+.counter-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: bold;
+}
+
+.zikr-counter-btn.completed .counter-circle {
+  background: var(--sage-dark);
+  border-color: var(--sage-dark);
+  box-shadow: none;
+  transform: scale(0.95);
+}
+
+.zikr-counter-btn.completed .count-num {
+  color: white;
+}
+
+.zikr-counter-btn.completed .counter-label {
+  color: var(--sage-dark);
+}
