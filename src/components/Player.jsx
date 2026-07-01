@@ -1,8 +1,8 @@
 import React, { useState, useRef, useMemo } from 'react';
 import {
   Play, Pause, SkipForward, SkipBack, Download, Repeat,
-  ChevronUp, ChevronDown, Volume2, BookOpen, Languages,
-  Heart, BookmarkCheck, Type, X, Sparkles
+  ChevronUp, ChevronDown, BookOpen, Languages,
+  Heart, BookmarkCheck, X, Sparkles
 } from 'lucide-react';
 
 // Pre-computed static wavy path — the wave never moves, only the knob & fill moves
@@ -69,38 +69,9 @@ function WavyProgress({ progressPct, duration, currentTime, onSeek }) {
   );
 }
 
-const MushafIllustration = ({ size, isPlaying }) => (
-  <div className="mushaf-illustration-wrapper" style={{ width: size, height: size, position: 'relative' }}>
-    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '70%', height: '70%', transition: 'transform 0.4s ease' }} className={isPlaying ? 'pulse-mushaf' : ''}>
-      {/* Book spine */}
-      <rect x="37" y="10" width="6" height="58" rx="2" fill="var(--accent-sage-dark)" opacity="0.6" />
-      {/* Left page */}
-      <path d="M37 12 C37 12 18 14 14 18 L14 62 C18 58 37 60 37 60 Z" fill="var(--accent-sage-light)" stroke="var(--accent-sage-dark)" strokeWidth="1.5" />
-      {/* Right page */}
-      <path d="M43 12 C43 12 62 14 66 18 L66 62 C62 58 43 60 43 60 Z" fill="var(--accent-sage-light)" stroke="var(--accent-sage-dark)" strokeWidth="1.5" />
-      {/* Text lines — left */}
-      <line x1="19" y1="25" x2="34" y2="23" stroke="var(--accent-sage)" strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
-      <line x1="19" y1="31" x2="34" y2="29" stroke="var(--accent-sage)" strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
-      <line x1="19" y1="37" x2="34" y2="35" stroke="var(--accent-sage)" strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
-      <line x1="19" y1="43" x2="34" y2="41" stroke="var(--accent-sage)" strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
-      <line x1="19" y1="49" x2="34" y2="47" stroke="var(--accent-sage)" strokeWidth="1.2" strokeLinecap="round" opacity="0.5" />
-      {/* Text lines — right */}
-      <line x1="46" y1="23" x2="61" y2="25" stroke="var(--accent-sage)" strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
-      <line x1="46" y1="29" x2="61" y2="31" stroke="var(--accent-sage)" strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
-      <line x1="46" y1="35" x2="61" y2="37" stroke="var(--accent-sage)" strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
-      <line x1="46" y1="41" x2="61" y2="43" stroke="var(--accent-sage)" strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
-      <line x1="46" y1="47" x2="61" y2="49" stroke="var(--accent-sage)" strokeWidth="1.2" strokeLinecap="round" opacity="0.5" />
-    </svg>
-    {/* Animated visualizer spectrum overlay */}
-    <div className={`audio-visualizer ${isPlaying ? 'playing' : ''}`}>
-      <span className="vis-bar"></span>
-      <span className="vis-bar"></span>
-      <span className="vis-bar"></span>
-      <span className="vis-bar"></span>
-      <span className="vis-bar"></span>
-      <span className="vis-bar"></span>
-      <span className="vis-bar"></span>
-    </div>
+const MushafIllustration = ({ isPlaying }) => (
+  <div className={`mushaf-illustration-wrapper ${isPlaying ? 'pulse-mushaf' : ''}`} style={{ color: 'var(--accent-sage-dark)', opacity: 0.8, display: 'flex', justifyContent: 'center', alignItems: 'center', height: '150px' }}>
+    <BookOpen size={100} strokeWidth={1} />
   </div>
 );
 
