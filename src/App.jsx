@@ -56,7 +56,18 @@ export default function App() {
       setShowInstallPrompt(true);
     };
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    
+    // Auto prompt every 3 minutes if not installed
+    const interval = setInterval(() => {
+      if (window.matchMedia('(display-mode: browser)').matches) {
+        setShowInstallPrompt(true);
+      }
+    }, 3 * 60 * 1000);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      clearInterval(interval);
+    };
   }, []);
 
   const handleInstallApp = async () => {
@@ -332,9 +343,9 @@ export default function App() {
               <div className="logo-icon"><MushafIcon /></div>
               <span className="logo-text">الذكر الحكيم</span>
             </div>
-            <ul className="sidebar-nav">
+            <ul className="nav-links">
               {navItems.map(n => (
-                <li key={n.key} className={tab === n.key ? 'active' : ''} onClick={() => { setTab(n.key); setSheetOpen(false); }}>
+                <li key={n.key} className={`nav-item ${tab === n.key ? 'active' : ''}`} onClick={() => { setTab(n.key); setSheetOpen(false); }}>
                   <n.icon size={18} /> {n.label}
                 </li>
               ))}
