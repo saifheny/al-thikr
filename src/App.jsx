@@ -329,15 +329,24 @@ export default function App() {
         {notification && <div className="notification"><Bell size={13} /><span>{notification}</span></div>}
 
         {tab === 'reciters' && (
-          <RecitersPage reciters={RECITERS} pinnedReciters={pinnedReciters} onTogglePin={handleTogglePinReciter} onSelectReciter={handleSelectReciter} />
+          <>
+            <RecitersPage reciters={RECITERS} pinnedReciters={pinnedReciters} onTogglePin={handleTogglePinReciter} onSelectReciter={handleSelectReciter} />
+            <div className="hadith-promo-card" onClick={() => setTab('hadith')}>
+              <div className="hadith-promo-icon"><BookOpen size={28} /></div>
+              <div className="hadith-promo-info">
+                <h3>الأربعون النووية</h3>
+                <p>أحاديث مختارة في أصول الدين وقواعد الإسلام</p>
+              </div>
+              <span className="hadith-promo-btn">ابدأ الآن</span>
+            </div>
+          </>
         )}
 
         {tab === 'dashboard' && (
           <Dashboard surahs={surahs} activeSurah={activeSurah} activeReciter={activeReciter} onSelectSurah={handleSelectSurah} pinnedSurahs={pinnedSurahs} onTogglePinSurah={handleTogglePinSurah} favorites={favorites} setTab={setTab} onPlayRadio={() => { if(isPlaying) handlePlayPause(); }} />
         )}
 
-        {tab === 'hadith' && <HadithPage />}
-        {tab === 'azkar' && <AzkarPage />}
+        {tab === 'hadith' && <HadithPage onBack={() => setTab('reciters')} />}
 
         {tab === 'player' && (
           <div className="quran-workspace">
@@ -401,11 +410,7 @@ export default function App() {
         </nav>
       )}
 
-      {/* Floating Hadith Button */}
-      <button className="floating-hadith-btn" onClick={() => setTab('hadith')} title="الأربعون النووية">
-        <BookOpen size={18} />
-        <span>الأحاديث</span>
-      </button>
+
 
       {/* Tafsir Modal */}
       {tafsirData && (

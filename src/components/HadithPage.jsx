@@ -1,7 +1,7 @@
-﻿import React, { useState, useEffect } from 'react';
-import { BookOpen, ChevronRight, ChevronLeft, Loader } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowRight, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 
-export default function HadithPage() {
+export default function HadithPage({ onBack }) {
   const [hadiths, setHadiths] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -31,53 +31,68 @@ export default function HadithPage() {
 
   if (loading) {
     return (
-      <div className="empty-state">
-        <Loader className="spin" size={32} style={{ color: 'var(--sage)', marginBottom: 15 }} />
-        <p>جاري تحميل الأحاديث...</p>
+      <div className="hadith-page">
+        <div className="hadith-topbar">
+          <button className="hadith-back-btn" onClick={onBack}>
+            <ArrowRight size={20} />
+            <span>رجوع</span>
+          </button>
+        </div>
+        <div className="empty-state">
+          <Loader2 className="spin" size={32} style={{ color: 'var(--sage)', marginBottom: 15 }} />
+          <p>جاري تحميل الأحاديث...</p>
+        </div>
       </div>
     );
   }
 
   if (hadiths.length === 0) {
     return (
-      <div className="empty-state">
-        <BookOpen size={48} strokeWidth={1.5} />
-        <p>عذراً، لم نتمكن من تحميل الأحاديث حالياً.</p>
+      <div className="hadith-page">
+        <div className="hadith-topbar">
+          <button className="hadith-back-btn" onClick={onBack}>
+            <ArrowRight size={20} />
+            <span>رجوع</span>
+          </button>
+        </div>
+        <div className="empty-state">
+          <p>لم نتمكن من تحميل الأحاديث حالياً.</p>
+        </div>
       </div>
     );
   }
 
   const currentHadith = hadiths[currentIndex];
+  const isFirst = currentIndex === 0;
+  const isLast = currentIndex === hadiths.length - 1;
 
   return (
-    <div className="hadith-container">
-      <div className="hadith-header">
-        <div className="title-wrapper">
-          <h2>الأربعون النووية</h2>
-          <span className="subtitle">للإمام يحيى بن شرف النووي</span>
+    <div className="hadith-page">
+      <div className="hadith-topbar">
+        <button className="hadith-back-btn" onClick={onBack}>
+          <ArrowRight size={20} />
+          <span>رجوع</span>
+        </button>
+        <div className="hadith-topbar-title">
+          <span>الأربعون النووية</span>
         </div>
+        <span className="hadith-counter">{currentIndex + 1} / {hadiths.length}</span>
       </div>
-      
-      <div className="hadith-book-view">
-        <div className="hadith-number-badge">الحديث {currentHadith.hadithnumber}</div>
-        
-        <div className="hadith-text-content">
-          <p className="hadith-arabic-text">{currentHadith.text}</p>
-        </div>
 
-        <div className="hadith-controls">
-          <button className="nav-btn" onClick={handleNext} disabled={currentIndex === hadiths.length - 1} title="الحديث التالي">
-            <ChevronRight size={24} />
-          </button>
-          
-          <span className="page-indicator">
-            {currentIndex + 1} / {hadiths.length}
-          </span>
-          
-          <button className="nav-btn" onClick={handlePrev} disabled={currentIndex === 0} title="الحديث السابق">
-            <ChevronLeft size={24} />
-          </button>
-        </div>
+      <div className="hadith-body">
+        <div className="hadith-badge">الحديث {currentHadith.hadithnumber}</div>
+        <p className="hadith-text">{currentHadith.text}</p>
+      </div>
+
+      <div className="hadith-nav-bar">
+        <button className="hadith-nav-btn prev" onClick={handlePrev} disabled={isFirst}>
+          <ChevronRight size={22} />
+          <span>السابق</span>
+        </button>
+        <button className="hadith-nav-btn next" onClick={handleNext} disabled={isLast}>
+          <span>الحديث التالي</span>
+          <ChevronLeft size={22} />
+        </button>
       </div>
     </div>
   );
