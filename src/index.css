@@ -1218,47 +1218,61 @@ button:hover svg.lucide,
 .hadith-page {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 80px);
-  padding-bottom: 2rem;
+  min-height: calc(100vh - 20px);
+  padding-bottom: 120px; /* Extra bottom padding so buttons aren't blocked */
+  background: var(--bg); /* Ensure it has a background to cover anything behind */
 }
-
 .hadith-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.8rem 1rem;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg2);
+  padding: 1.5rem 1rem;
   position: sticky;
   top: 0;
   z-index: 10;
+  pointer-events: none; /* Let clicks pass through empty areas */
+}
+
+.hadith-topbar > * {
+  pointer-events: auto; /* Re-enable clicks on the children */
 }
 
 .hadith-back-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: none;
-  border: none;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  background: var(--surface, var(--bg2));
+  border: 1px solid var(--border);
   color: var(--sage);
-  font-family: 'Tajawal', sans-serif;
-  font-weight: 700;
-  font-size: 0.95rem;
+  border-radius: 50%;
   cursor: pointer;
-  padding: 6px 12px;
-  border-radius: 10px;
-  transition: var(--ease);
+  box-shadow: 0 4px 15px rgba(106, 158, 130, 0.15);
+  transition: var(--spring);
+}
+.hadith-back-btn span {
+  display: none; /* Hide the text, keep the icon */
 }
 
 .hadith-back-btn:hover {
-  background: var(--sage-light);
+  background: var(--sage);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(106, 158, 130, 0.3);
 }
 
 .hadith-topbar-title {
   font-family: 'Tajawal', sans-serif;
   font-weight: 700;
   font-size: 1rem;
-  color: var(--text);
+  color: var(--sage-dark);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 8px 24px;
+  border-radius: 30px;
+  border: 1px solid rgba(106, 158, 130, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
 .hadith-counter {
@@ -1266,11 +1280,12 @@ button:hover svg.lucide,
   font-size: 0.85rem;
   color: var(--muted);
   font-weight: 600;
-  background: var(--bg3);
-  padding: 4px 12px;
+  background: var(--surface, var(--bg2));
+  border: 1px solid var(--border);
+  padding: 6px 14px;
   border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
 }
-
 .hadith-body {
   flex: 1;
   display: flex;
@@ -1373,3 +1388,152 @@ button:hover svg.lucide,
 .notification {
   font-family: 'Tajawal', sans-serif;
 }
+
+
+/* ── Onboarding Tour ── */
+.tour-modal {
+  background: var(--bg2);
+  width: 90%;
+  max-width: 450px;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+  animation: modal-enter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tour-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--bg3);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text2);
+  cursor: pointer;
+}
+
+.tour-content {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.tour-icon-wrap {
+  width: 80px;
+  height: 80px;
+  background: var(--sage-light);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.tour-content h2 {
+  color: var(--text);
+  font-size: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.tour-content p {
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.tour-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 2rem;
+}
+
+.tour-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--border);
+  transition: var(--ease);
+}
+
+.tour-dot.active {
+  width: 24px;
+  background: var(--sage);
+}
+
+.tour-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.tour-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: var(--ease);
+}
+
+.tour-btn.primary {
+  background: var(--sage);
+  color: white;
+}
+
+.tour-btn.secondary {
+  background: var(--bg3);
+  color: var(--text2);
+}
+
+.tour-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* ── Phone Mockup (Desktop Player) ── */
+.phone-mockup {
+  width: 380px;
+  height: 750px;
+  background: #111;
+  border-radius: 45px;
+  padding: 12px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(255,255,255,0.1);
+  margin: 2rem auto;
+  position: relative;
+}
+
+.phone-mockup::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 30px;
+  background: #111;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  z-index: 20;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  border-radius: 35px;
+  overflow: hidden;
+  position: relative;
+}
+
+.phone-screen .player-container {
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+}
+

@@ -1,24 +1,26 @@
-import React from 'react';
+﻿import React from 'react';
 import { Award, BookOpen, CheckCircle, Heart, Trophy, Target, Zap, Star } from 'lucide-react';
 
-export default function StatsTracker({ surahs, favorites = [], memorized = [], onToggleMemorized, onSelectSurah, setTab }) {
+export default function StatsTracker({ surahs, favorites = [], memorized = [], readHadiths = [], onToggleMemorized, onSelectSurah, setTab }) {
   const memPct = surahs.length ? Math.round((memorized.length / surahs.length) * 100) : 0;
   const favPct = surahs.length ? Math.round((favorites.length / surahs.length) * 100) : 0;
+  const hadithPct = Math.round((readHadiths.length / 42) * 100);
   const memSurahs = surahs.filter(s => memorized.includes(s.number));
 
   const badges = [
-    { icon: Heart, label: 'القارئ المحب', gradient: 'linear-gradient(135deg,#ff6b9d,#ffc3e0)', unlocked: favorites.length > 0 },
+    { icon: Heart, label: 'محب القرآن', gradient: 'linear-gradient(135deg,#ff6b9d,#ffc3e0)', unlocked: favorites.length > 0 },
     { icon: Target, label: 'بداية الحفظ', gradient: 'linear-gradient(135deg,#667eea,#a8c8ff)', unlocked: memorized.length > 0 },
-    { icon: Zap, label: 'مجتهد', gradient: 'linear-gradient(135deg,#f6d365,#fda085)', unlocked: memorized.length >= 10 },
+    { icon: BookOpen, label: 'طالب حديث', gradient: 'linear-gradient(135deg,#43e97b,#38f9d7)', unlocked: readHadiths.length > 0 },
+    { icon: Zap, label: 'مُثابر', gradient: 'linear-gradient(135deg,#f6d365,#fda085)', unlocked: memorized.length >= 10 || readHadiths.length >= 10 },
     { icon: Trophy, label: 'حافظ', gradient: 'linear-gradient(135deg,#a8edea,#fed6e3)', unlocked: memorized.length >= 30 },
-    { icon: Star, label: 'متميز', gradient: 'linear-gradient(135deg,#ffd700,#ff8c00)', unlocked: favorites.length >= 10 },
+    { icon: Star, label: 'عالم بالنووية', gradient: 'linear-gradient(135deg,#ffd700,#ff8c00)', unlocked: readHadiths.length >= 42 },
   ];
 
   return (
     <div className="stats-page">
       <div className="welcome-title">
         <h1><Trophy size={22} color="#f39c12" style={{ verticalAlign: 'middle', marginLeft: '0.4rem' }} />متابعة الإنجازات</h1>
-        <p>راقب تقدمك في التلاوة والحفظ</p>
+        <p>تابع تقدمك في التلاوة والحفظ وقراءة الأحاديث</p>
       </div>
 
       {/* Stats row */}
@@ -27,17 +29,17 @@ export default function StatsTracker({ surahs, favorites = [], memorized = [], o
           <Award size={18} />
           <div>
             <span className="stat-chip-val">{memPct}%</span>
-            <span className="stat-chip-lbl">محفوظ</span>
+            <span className="stat-chip-lbl">مُحفظ</span>
           </div>
           <div className="stat-chip-bar"><div style={{ width: `${memPct}%`, background: '#1abc9c' }} /></div>
         </div>
-        <div className="stat-chip red">
-          <Heart size={18} />
+        <div className="stat-chip" style={{ background: 'var(--sage-light)', color: 'var(--sage-dark)' }}>
+          <BookOpen size={18} />
           <div>
-            <span className="stat-chip-val">{favorites.length}</span>
-            <span className="stat-chip-lbl">مفضلة</span>
+            <span className="stat-chip-val">{readHadiths.length} / 42</span>
+            <span className="stat-chip-lbl">أحاديث مقروءة</span>
           </div>
-          <div className="stat-chip-bar"><div style={{ width: `${favPct}%`, background: '#e74c3c' }} /></div>
+          <div className="stat-chip-bar"><div style={{ width: `${hadithPct}%`, background: 'var(--sage)' }} /></div>
         </div>
         <div className="stat-chip blue">
           <CheckCircle size={18} />
@@ -51,14 +53,14 @@ export default function StatsTracker({ surahs, favorites = [], memorized = [], o
 
       {/* Badges */}
       <div>
-        <h3 className="section-title"><Star size={16} /> الأوسمة</h3>
+        <h3 className="section-title" style={{ fontFamily: 'Tajawal, sans-serif' }}><Star size={16} /> الأوسمة</h3>
         <div className="badges-row">
           {badges.map((b, i) => (
             <div key={i} className={`badge-chip ${b.unlocked ? 'unlocked' : 'locked'}`}>
               <div className="badge-icon-wrap" style={{ background: b.unlocked ? b.gradient : undefined }}>
                 <b.icon size={16} color={b.unlocked ? '#fff' : undefined} />
               </div>
-              <span>{b.label}</span>
+              <span style={{ fontFamily: 'Tajawal, sans-serif', fontWeight: 600 }}>{b.label}</span>
             </div>
           ))}
         </div>
@@ -66,11 +68,11 @@ export default function StatsTracker({ surahs, favorites = [], memorized = [], o
 
       {/* Memorized list */}
       <div>
-        <h3 className="section-title"><CheckCircle size={16} color="var(--accent-sage)" /> السور المحفوظة</h3>
+        <h3 className="section-title" style={{ fontFamily: 'Tajawal, sans-serif' }}><CheckCircle size={16} color="var(--accent-sage)" /> السور المحفوظة</h3>
         {memSurahs.length === 0 ? (
           <div className="empty-state" style={{ padding: '1.5rem' }}>
             <BookOpen size={36} strokeWidth={1.5} />
-            <p>لم تحفظ أي سورة بعد</p>
+            <p style={{ fontFamily: 'Tajawal, sans-serif' }}>لم تحفظ أي سورة بعد</p>
           </div>
         ) : (
           <div className="memorized-list">
@@ -80,7 +82,7 @@ export default function StatsTracker({ surahs, favorites = [], memorized = [], o
                   <span className="surah-number" style={{ width: 30, height: 30, fontSize: '0.75rem' }}>{s.number}</span>
                   <div>
                     <h4 style={{ fontSize: '0.9rem', fontWeight: 700 }}>{s.name}</h4>
-                    <p style={{ fontSize: '0.7rem', color: 'var(--text2)' }}>{s.englishName} · {s.numberOfAyahs} آية</p>
+                    <p style={{ fontSize: '0.7rem', color: 'var(--text2)' }}>{s.englishName} • {s.numberOfAyahs} آية</p>
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '0.4rem' }}>
