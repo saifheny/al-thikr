@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { BookOpen, Compass, Award, Users, Bell, Clock, List, X } from 'lucide-react';
 import { fetchSurahList, fetchSurahDetail, RECITERS, checkSurahCached, getCachedAudioUrl, cacheSurahAudio, fetchAyahTafsir } from './services/quranApi';
 import RecitersPage from './components/RecitersPage';
@@ -71,7 +71,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    document.title = 'Ø§Ù„Ø°ÙƒØ± Ø§Ù„Ø­ÙƒÙŠÙ… - ØªØ·Ø¨ÙŠÙ‚ Ø§Ù„Ù‚Ø±Ø¢Ù† Ø§Ù„ÙƒØ±ÙŠÙ…';
+    document.title = 'الذكر الحكيم - تطبيق القرآن الكريم';
     document.documentElement.dir = 'rtl';
     document.documentElement.lang = 'ar';
   }, []);
@@ -95,13 +95,12 @@ export default function App() {
         const data = await fetchSurahList();
         setSurahs(data);
       } catch {
-        showNotification('Ø­ØµÙ„Øª Ù…Ø´ÙƒÙ„Ø© ÙˆØ¥Ø­Ù†Ø§ Ø¨Ù†Ø­Ù…Ù„ Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø³ÙˆØ±');
+        showNotification('حصلت مشكلة وإحنا بنحمل قائمة السور');
       } finally {
         setLoading(false);
       }
     })();
 
-    // Request Notification permission automatically on first load
     if ("Notification" in window && Notification.permission === "default") {
       Notification.requestPermission();
     }
@@ -114,7 +113,7 @@ export default function App() {
     setFavorites(prev => {
       const next = prev.includes(num) ? prev.filter(n => n !== num) : [...prev, num];
       persist('favorites', next);
-      showNotification(prev.includes(num) ? 'Ø£ÙØ²ÙŠÙ„Øª Ù…Ù† Ø§Ù„Ù…ÙØ¶Ù„Ø©' : 'Ø£ÙØ¶ÙŠÙØª Ù„Ù„Ù…ÙØ¶Ù„Ø©');
+      showNotification(prev.includes(num) ? 'أُزيلت من المفضلة' : 'أُضيفت للمفضلة');
       return next;
     });
   };
@@ -124,7 +123,7 @@ export default function App() {
     setMemorized(prev => {
       const next = prev.includes(num) ? prev.filter(n => n !== num) : [...prev, num];
       persist('memorized', next);
-      showNotification(prev.includes(num) ? 'Ø£ÙØ²ÙŠÙ„Øª Ù…Ù† Ø§Ù„Ù…Ø­ÙÙˆØ¸Ø§Øª' : 'ØªÙ… ØªØ³Ø¬ÙŠÙ„Ù‡Ø§ Ù…Ø­ÙÙˆØ¸Ø© âœ“');
+      showNotification(prev.includes(num) ? 'أُزيلت من المحفوظات' : 'تم تسجيلها محفوظة ✓');
       return next;
     });
   };
@@ -157,7 +156,7 @@ export default function App() {
       setCurrentTime(0);
       setSheetOpen(false);
     } catch {
-      showNotification('ÙÙŠ Ù…Ø´ÙƒÙ„Ø© ÙÙŠ ØªØ­Ù…ÙŠÙ„ ØªÙØ§ØµÙŠÙ„ Ø§Ù„Ø³ÙˆØ±Ø©');
+      showNotification('في مشكلة في تحميل تفاصيل السورة');
     } finally {
       setLoading(false);
     }
@@ -165,7 +164,7 @@ export default function App() {
 
   const handleSelectReciter = (reciter) => {
     setActiveReciter(reciter);
-    showNotification(`ØªÙ… Ø§Ø®ØªÙŠØ§Ø±: ${reciter.name}`);
+    showNotification(`تم اختيار: ${reciter.name}`);
     setTab('dashboard');
   };
 
@@ -180,7 +179,7 @@ export default function App() {
     } else {
       const next = activeSurah.number + 1;
       if (next <= 114) handleSelectSurah(next);
-      else showNotification('ÙˆØµÙ„Øª Ø¥Ù„Ù‰ Ù†Ù‡Ø§ÙŠØ© Ø§Ù„Ù…ØµØ­Ù Ø§Ù„Ø´Ø±ÙŠÙ');
+      else showNotification('وصلت إلى نهاية المصحف الشريف');
     }
   }, [activeSurah, activeAyahIndex, isLoopSurah]);
 
@@ -190,10 +189,10 @@ export default function App() {
     else { const prev = activeSurah.number - 1; if (prev >= 1) handleSelectSurah(prev); }
   };
 
-  const handleSpeedChange = (s) => { setSpeed(s); audioRef.current.playbackRate = s; showNotification(`Ø³Ø±Ø¹Ø© Ø§Ù„ØªÙ„Ø§ÙˆØ©: ${s}x`); };
+  const handleSpeedChange = (s) => { setSpeed(s); audioRef.current.playbackRate = s; showNotification(`سرعة التلاوة: ${s}x`); };
   const handleSeek = (t) => { audioRef.current.currentTime = t; setCurrentTime(t); };
-  const handleToggleLoopSurah = () => { setIsLoopSurah(p => !p); if (!isLoopSurah) setIsLoopAyah(false); showNotification(!isLoopSurah ? 'ØªÙƒØ±Ø§Ø± Ø§Ù„Ø³ÙˆØ±Ø© ÙØ¹Ù‘Ø§Ù„' : 'Ø¥Ù„ØºØ§Ø¡ ØªÙƒØ±Ø§Ø± Ø§Ù„Ø³ÙˆØ±Ø©'); };
-  const handleToggleLoopAyah = () => { setIsLoopAyah(p => !p); if (!isLoopAyah) setIsLoopSurah(false); showNotification(!isLoopAyah ? 'ØªÙƒØ±Ø§Ø± Ø§Ù„Ø¢ÙŠØ© ÙØ¹Ù‘Ø§Ù„' : 'Ø¥Ù„ØºØ§Ø¡ ØªÙƒØ±Ø§Ø± Ø§Ù„Ø¢ÙŠØ©'); };
+  const handleToggleLoopSurah = () => { setIsLoopSurah(p => !p); if (!isLoopSurah) setIsLoopAyah(false); showNotification(!isLoopSurah ? 'تكرار السورة فعّال' : 'إلغاء تكرار السورة'); };
+  const handleToggleLoopAyah = () => { setIsLoopAyah(p => !p); if (!isLoopAyah) setIsLoopSurah(false); showNotification(!isLoopAyah ? 'تكرار الآية فعّال' : 'إلغاء تكرار الآية'); };
   const handleAyahClick = (index) => { setActiveAyahIndex(index); setIsPlaying(true); };
   
   const handleClosePlayer = () => {
@@ -209,7 +208,7 @@ export default function App() {
   const handleDownload = async () => {
     if (!activeSurah) return;
     try {
-      showNotification(`Ø¬Ø§Ø±ÙŠ ØªØ­Ù…ÙŠÙ„ Ø³ÙˆØ±Ø© ${activeSurah.name.replace('Ø³ÙÙˆØ±ÙŽØ©Ù ', '')} Ù„Ù„Ø§Ø³ØªÙ…Ø§Ø¹ Ø¯ÙˆÙ† Ø§ØªØµØ§Ù„...`);
+      showNotification(`جاري تحميل سورة ${activeSurah.name.replace('سُورَةُ ', '')} للاستماع دون اتصال...`);
       setDownloadProgress({ current: 0, total: activeSurah.ayahs.length, surahNum: activeSurah.number });
       
       await cacheSurahAudio(activeSurah.ayahs, (current, total) => {
@@ -224,10 +223,10 @@ export default function App() {
       });
 
       setDownloadProgress(null);
-      showNotification(`âœ“ ØªÙ… Ø­ÙØ¸ Ø³ÙˆØ±Ø© ${activeSurah.name.replace('Ø³ÙÙˆØ±ÙŽØ©Ù ', '')} Ø¨Ù†Ø¬Ø§Ø­! ÙŠÙ…ÙƒÙ†Ùƒ Ø§Ù„Ø¢Ù† ØªØ´ØºÙŠÙ„Ù‡Ø§ Ø¯ÙˆÙ† Ø§ØªØµØ§Ù„ Ø¨Ø§Ù„Ø¥Ù†ØªØ±Ù†Øª.`);
+      showNotification(`✓ تم حفظ سورة ${activeSurah.name.replace('سُورَةُ ', '')} بنجاح! يمكنك الآن تشغيلها دون اتصال بالإنترنت.`);
     } catch (e) {
       setDownloadProgress(null);
-      showNotification('Ù…Ø¹Ù„Ø´ØŒ Ø§Ù„Ø³ÙˆØ±Ø© Ù…Ù†Ø²Ù„ØªØ´. ÙŠØ§Ø±ÙŠØª ØªØªØ£ÙƒØ¯ Ù…Ù† Ø§Ù„Ù†Øª Ø¹Ù†Ø¯Ùƒ.');
+      showNotification('معلش، السورة منزلتش. ياريت تتأكد من النت عندك.');
     }
   };
 
@@ -237,7 +236,7 @@ export default function App() {
       const text = await fetchAyahTafsir(ayah.number);
       setTafsirData({ ayah, text, loading: false });
     } catch {
-      setTafsirData({ ayah, text: 'Ù…Ø¹Ù„Ø´ Ù…Ù‚Ø¯Ø±Ù†Ø§Ø´ Ù†Ø­Ù…Ù„ Ø§Ù„ØªÙØ³ÙŠØ±ØŒ Ø§ØªØ£ÙƒØ¯ Ù…Ù† Ø§Ù„Ù†Øª Ø¨ØªØ§Ø¹Ùƒ.', loading: false });
+      setTafsirData({ ayah, text: 'معلش مقدرناش نحمل التفسير، اتأكد من النت بتاعك.', loading: false });
     }
   };
 
@@ -285,11 +284,11 @@ export default function App() {
   }, [activeAyahIndex]);
 
   const navItems = [
-    { key: 'reciters', icon: Users, label: 'Ø§Ù„Ù‚Ø±Ø§Ø¡' },
-    { key: 'dashboard', icon: List, label: 'Ø§Ù„Ø³ÙˆØ±' },
-    { key: 'player', icon: BookOpen, label: 'Ø§Ù„Ù…ØµØ­Ù' },
-    { key: 'prayers', icon: Clock, label: 'Ø§Ù„Ø£Ø°Ø§Ù† ÙˆØ§Ù„Ù‚Ø¨Ù„Ø©' },
-    { key: 'stats', icon: Award, label: 'Ø§Ù„Ø¥Ù†Ø¬Ø§Ø²Ø§Øª' },
+    { key: 'reciters', icon: Users, label: 'القراء' },
+    { key: 'dashboard', icon: List, label: 'السور' },
+    { key: 'player', icon: BookOpen, label: 'المصحف' },
+    { key: 'prayers', icon: Clock, label: 'الأذان والقبلة' },
+    { key: 'stats', icon: Award, label: 'الإنجازات' },
   ];
 
   const MushafIcon = () => (
@@ -314,12 +313,12 @@ export default function App() {
           <div className="install-prompt-content">
             <img src="/al-thikr/custom-icon.jpg" alt="Icon" className="install-icon" />
             <div className="install-text">
-              <h4>Ø§Ù„Ø°ÙƒØ± Ø§Ù„Ø­ÙƒÙŠÙ…</h4>
-              <p>Ù‚Ù… Ø¨ØªØ«Ø¨ÙŠØª Ø§Ù„ØªØ·Ø¨ÙŠÙ‚ Ù„Ù„ÙˆØµÙˆÙ„ Ø§Ù„Ø³Ø±ÙŠØ¹ Ø¨Ø¯ÙˆÙ† Ø¥Ù†ØªØ±Ù†Øª</p>
+              <h4>الذكر الحكيم</h4>
+              <p>قم بتثبيت التطبيق للوصول السريع بدون إنترنت</p>
             </div>
           </div>
           <div className="install-actions">
-            <button className="btn-install" onClick={handleInstallApp}>ØªØ«Ø¨ÙŠØª</button>
+            <button className="btn-install" onClick={handleInstallApp}>تثبيت</button>
             <button className="btn-dismiss" onClick={() => setShowInstallPrompt(false)}><X size={18} /></button>
           </div>
         </div>
@@ -331,7 +330,7 @@ export default function App() {
           <div>
             <div className="logo-section">
               <div className="logo-icon"><MushafIcon /></div>
-              <span className="logo-text">Ø§Ù„Ø°ÙƒØ± Ø§Ù„Ø­ÙƒÙŠÙ…</span>
+              <span className="logo-text">الذكر الحكيم</span>
             </div>
             <ul className="sidebar-nav">
               {navItems.map(n => (
@@ -342,14 +341,14 @@ export default function App() {
             </ul>
           </div>
           <div className="sidebar-bottom-actions" style={{ padding: '1rem 0', textAlign: 'center', opacity: 0.5, fontSize: '0.8rem' }}>
-            <span>ØªØ§Ø¨Ø¹ Ù„Ù…Ø¤Ø³Ø³Ø© SA 2026</span>
+            <span>تابع لمؤسسة SA 2026</span>
           </div>
         </nav>
       )}
 
       {/* Main content */}
       <main className="main-content">
-        {loading && <div className="loading-bar"><span className="spinner" /> Ø¬Ø§Ø±ÙŠ Ø§Ù„ØªØ­Ù…ÙŠÙ„...</div>}
+        {loading && <div className="loading-bar"><span className="spinner" /> جاري التحميل...</div>}
         {notification && <div className="notification"><Bell size={13} /><span>{notification}</span></div>}
 
         {tab === 'reciters' && (
@@ -358,10 +357,10 @@ export default function App() {
             <div className="hadith-promo-card" onClick={() => setTab('hadith')}>
               <div className="hadith-promo-icon"><BookOpen size={28} /></div>
               <div className="hadith-promo-info">
-                <h3>Ø§Ù„Ø£Ø±Ø¨Ø¹ÙˆÙ† Ø§Ù„Ù†ÙˆÙˆÙŠØ©</h3>
-                <p>Ø£Ø­Ø§Ø¯ÙŠØ« Ù…Ø®ØªØ§Ø±Ø© ÙÙŠ Ø£ØµÙˆÙ„ Ø§Ù„Ø¯ÙŠÙ† ÙˆÙ‚ÙˆØ§Ø¹Ø¯ Ø§Ù„Ø¥Ø³Ù„Ø§Ù…</p>
+                <h3>الأربعون النووية</h3>
+                <p>أحاديث مختارة في أصول الدين وقواعد الإسلام</p>
               </div>
-              <span className="hadith-promo-btn">Ø§Ø¨Ø¯Ø£ Ø§Ù„Ø¢Ù†</span>
+              <span className="hadith-promo-btn">ابدأ الآن</span>
             </div>
           </>
         )}
@@ -375,53 +374,18 @@ export default function App() {
         {tab === 'player' && (
           <div className="quran-workspace">
             <div className="player-pane">
-  {!isMobile ? (
-    <div className="phone-mockup">
-      <div className="phone-screen">
-        <Player
-          activeSurah={activeSurah} activeReciter={activeReciter} isPlaying={isPlaying}
-          currentTime={currentTime} duration={duration} speed={speed} activeAyahIndex={activeAyahIndex}
-          onPlayPause={handlePlayPause} onNext={handleNext} onPrev={handlePrev}
-          onSpeedChange={handleSpeedChange} onSeek={handleSeek}
-          isLoopSurah={isLoopSurah} isLoopAyah={isLoopAyah}
-          onToggleLoopSurah={handleToggleLoopSurah} onToggleLoopAyah={handleToggleLoopAyah}
-          onDownload={handleDownload} sheetOpen={sheetOpen} setSheetOpen={setSheetOpen}
-          showTranslation={showTranslation} setShowTranslation={setShowTranslation} isMobile={isMobile}
-          isFavorite={activeSurahNum ? favorites.includes(activeSurahNum) : false}
-          onToggleFavorite={() => handleToggleFavorite(activeSurahNum)}
-          isMemorized={activeSurahNum ? memorized.includes(activeSurahNum) : false}
-          onToggleMemorized={() => handleToggleMemorized(activeSurahNum)}
-          onAyahClick={handleAyahClick}
-          downloadProgress={downloadProgress}
-          isCached={activeSurahNum ? cachedSurahNums.includes(activeSurahNum) : false}
-          onClose={handleClosePlayer}
-          onOpenTafsir={handleOpenTafsir}
-        />
-      </div>
-    </div>
-  ) : (
-    <Player
-      activeSurah={activeSurah} activeReciter={activeReciter} isPlaying={isPlaying}
-      currentTime={currentTime} duration={duration} speed={speed} activeAyahIndex={activeAyahIndex}
-      onPlayPause={handlePlayPause} onNext={handleNext} onPrev={handlePrev}
-      onSpeedChange={handleSpeedChange} onSeek={handleSeek}
-      isLoopSurah={isLoopSurah} isLoopAyah={isLoopAyah}
-      onToggleLoopSurah={handleToggleLoopSurah} onToggleLoopAyah={handleToggleLoopAyah}
-      onDownload={handleDownload} sheetOpen={sheetOpen} setSheetOpen={setSheetOpen}
-      showTranslation={showTranslation} setShowTranslation={setShowTranslation} isMobile={isMobile}
-      isFavorite={activeSurahNum ? favorites.includes(activeSurahNum) : false}
-      onToggleFavorite={() => handleToggleFavorite(activeSurahNum)}
-      isMemorized={activeSurahNum ? memorized.includes(activeSurahNum) : false}
-      onToggleMemorized={() => handleToggleMemorized(activeSurahNum)}
-      onAyahClick={handleAyahClick}
-      downloadProgress={downloadProgress}
-      isCached={activeSurahNum ? cachedSurahNums.includes(activeSurahNum) : false}
-      onClose={handleClosePlayer}
-      onOpenTafsir={handleOpenTafsir}
-    />
-  )}
-</div>
-            {!isMobile && (<Reader
+              {!isMobile ? (
+                <div className="phone-mockup">
+                  <div className="phone-screen">
+                    <Player activeSurah={activeSurah} activeReciter={activeReciter} isPlaying={isPlaying} currentTime={currentTime} duration={duration} speed={speed} activeAyahIndex={activeAyahIndex} onPlayPause={handlePlayPause} onNext={handleNext} onPrev={handlePrev} onSpeedChange={handleSpeedChange} onSeek={handleSeek} isLoopSurah={isLoopSurah} isLoopAyah={isLoopAyah} onToggleLoopSurah={handleToggleLoopSurah} onToggleLoopAyah={handleToggleLoopAyah} onDownload={handleDownload} sheetOpen={sheetOpen} setSheetOpen={setSheetOpen} showTranslation={showTranslation} setShowTranslation={setShowTranslation} isMobile={isMobile} isFavorite={activeSurahNum ? favorites.includes(activeSurahNum) : false} onToggleFavorite={() => handleToggleFavorite(activeSurahNum)} isMemorized={activeSurahNum ? memorized.includes(activeSurahNum) : false} onToggleMemorized={() => handleToggleMemorized(activeSurahNum)} onAyahClick={handleAyahClick} downloadProgress={downloadProgress} isCached={activeSurahNum ? cachedSurahNums.includes(activeSurahNum) : false} onClose={handleClosePlayer} onOpenTafsir={handleOpenTafsir} />
+                  </div>
+                </div>
+              ) : (
+                <Player activeSurah={activeSurah} activeReciter={activeReciter} isPlaying={isPlaying} currentTime={currentTime} duration={duration} speed={speed} activeAyahIndex={activeAyahIndex} onPlayPause={handlePlayPause} onNext={handleNext} onPrev={handlePrev} onSpeedChange={handleSpeedChange} onSeek={handleSeek} isLoopSurah={isLoopSurah} isLoopAyah={isLoopAyah} onToggleLoopSurah={handleToggleLoopSurah} onToggleLoopAyah={handleToggleLoopAyah} onDownload={handleDownload} sheetOpen={sheetOpen} setSheetOpen={setSheetOpen} showTranslation={showTranslation} setShowTranslation={setShowTranslation} isMobile={isMobile} isFavorite={activeSurahNum ? favorites.includes(activeSurahNum) : false} onToggleFavorite={() => handleToggleFavorite(activeSurahNum)} isMemorized={activeSurahNum ? memorized.includes(activeSurahNum) : false} onToggleMemorized={() => handleToggleMemorized(activeSurahNum)} onAyahClick={handleAyahClick} downloadProgress={downloadProgress} isCached={activeSurahNum ? cachedSurahNums.includes(activeSurahNum) : false} onClose={handleClosePlayer} onOpenTafsir={handleOpenTafsir} />
+              )}
+            </div>
+            {!isMobile && (
+              <Reader
                 activeSurah={activeSurah} activeAyahIndex={activeAyahIndex} onAyahClick={handleAyahClick}
                 showTranslation={showTranslation} setShowTranslation={setShowTranslation}
                 isFavorite={activeSurahNum ? favorites.includes(activeSurahNum) : false}
@@ -443,9 +407,9 @@ export default function App() {
         )}
       </main>
 
-    {/* Mobile Bottom Nav */}
-    {isMobile && tab !== 'hadith' && (
-      <nav className="mobile-bottom-nav">
+      {/* Mobile Bottom Nav */}
+      {isMobile && tab !== 'hadith' && (
+        <nav className="mobile-bottom-nav">
           {navItems.map(n => {
             const active = tab === n.key;
             return (
@@ -466,7 +430,7 @@ export default function App() {
         <div className="tafsir-overlay" onClick={() => setTafsirData(null)}>
           <div className="tafsir-modal" onClick={(e) => e.stopPropagation()}>
             <div className="tafsir-modal-header">
-              <h3>Ø§Ù„ØªÙØ³ÙŠØ± Ø§Ù„Ù…ÙŠØ³Ø±</h3>
+              <h3>التفسير الميسر</h3>
               <button className="tafsir-close-btn" onClick={() => setTafsirData(null)}>
                 <X size={18} />
               </button>
@@ -476,13 +440,13 @@ export default function App() {
                 {tafsirData.ayah.text}
               </p>
               <span style={{ fontSize: '0.8rem', color: 'var(--muted)', fontFamily: 'var(--font-en)' }}>
-                Ø§Ù„Ø¢ÙŠØ© {tafsirData.ayah.numberInSurah}
+                الآية {tafsirData.ayah.numberInSurah}
               </span>
             </div>
             <div className="tafsir-content">
               {tafsirData.loading ? (
                 <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--muted)' }}>
-                  <span className="spinner" /> Ø¬Ø§Ø±ÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„ØªÙØ³ÙŠØ±...
+                  <span className="spinner" /> جاري تحميل التفسير...
                 </div>
               ) : (
                 <p style={{ lineHeight: 2, fontSize: '1.05rem', color: 'var(--text)' }}>
@@ -496,5 +460,3 @@ export default function App() {
     </div>
   );
 }
-
-

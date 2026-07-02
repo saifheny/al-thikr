@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Clock, Navigation, Bell, BellOff, Compass, MapPin, Volume2, VolumeX } from 'lucide-react';
 
 const KAABA_LAT = 21.4225;
@@ -6,7 +6,7 @@ const KAABA_LNG = 39.8262;
 
 export default function PrayersPage({ showNotification }) {
   const [coords, setCoords] = useState(null);
-  const [locationName, setLocationName] = useState('Ù…ÙˆÙ‚Ø¹ ØºÙŠØ± Ù…Ø­Ø¯Ø¯');
+  const [locationName, setLocationName] = useState('موقع غير محدد');
   const [loading, setLoading] = useState(false);
   const [timings, setTimings] = useState(null);
   const [nextPrayer, setNextPrayer] = useState(null);
@@ -50,7 +50,7 @@ export default function PrayersPage({ showNotification }) {
 
   const requestLocation = () => {
     if (!navigator.geolocation) {
-      showNotification('Ù…ØªØµÙØ­Ùƒ Ù…Ø´ Ø¨ÙŠØ¯Ø¹Ù… ØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ù…ÙƒØ§Ù†');
+      showNotification('متصفحك مش بيدعم تحديد المكان');
       return;
     }
     setLoading(true);
@@ -66,7 +66,7 @@ export default function PrayersPage({ showNotification }) {
       },
       (error) => {
         setLoading(false);
-        showNotification('ÙŠØ§ Ø±ÙŠØª ØªØ³Ù…Ø­ Ù„Ù†Ø§ Ù†ÙˆØµÙ„ Ù„Ù…ÙƒØ§Ù†Ùƒ Ø¹Ø´Ø§Ù† Ù†Ø¸Ø¨Ø· Ù…ÙˆØ§Ù‚ÙŠØª Ø§Ù„ØµÙ„Ø§Ø© ÙˆØ§Ù„Ù‚Ø¨Ù„Ø© Ø¨Ø§Ù„Ø¸Ø¨Ø·');
+        showNotification('يا ريت تسمح لنا نوصل لمكانك عشان نظبط مواقيت الصلاة والقبلة بالظبط');
       },
       { enableHighAccuracy: true, timeout: 15000 }
     );
@@ -82,11 +82,11 @@ export default function PrayersPage({ showNotification }) {
       if (data.data) {
         setTimings(data.data.timings);
         if (data.data.meta) {
-          setLocationName(data.data.meta.timezone || 'Ù…ÙˆÙ‚Ø¹Ùƒ Ø§Ù„Ø­Ø§Ù„ÙŠ');
+          setLocationName(data.data.meta.timezone || 'موقعك الحالي');
         }
       }
     } catch (e) {
-      showNotification('Ø­Ø¯Ø« Ø®Ø·Ø£ Ø£Ø«Ù†Ø§Ø¡ ØªØ­Ù…ÙŠÙ„ Ù…ÙˆØ§Ù‚ÙŠØª Ø§Ù„ØµÙ„Ø§Ø©');
+      showNotification('حدث خطأ أثناء تحميل مواقيت الصلاة');
     } finally {
       setLoading(false);
     }
@@ -132,15 +132,15 @@ export default function PrayersPage({ showNotification }) {
   // Request notifications permission
   const requestNotificationPermission = async () => {
     if (!('Notification' in window)) {
-      showNotification('Ù…ØªØµÙØ­Ùƒ Ù„Ø§ ÙŠØ¯Ø¹Ù… Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø³Ø·Ø­ Ø§Ù„Ù…ÙƒØªØ¨');
+      showNotification('متصفحك لا يدعم إشعارات سطح المكتب');
       return;
     }
     const perm = await Notification.requestPermission();
     setNotificationPermission(perm);
     if (perm === 'granted') {
-      showNotification('Ø´ØºÙ„Ù†Ø§Ù„Ùƒ Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„Ø£Ø°Ø§Ù† Ø®Ù„Ø§Øµ');
+      showNotification('شغلنالك إشعارات الأذان خلاص');
     } else {
-      showNotification('Ù„Ù„Ø£Ø³Ù Ø±ÙØ¶Øª Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„Ø£Ø°Ø§Ù†');
+      showNotification('للأسف رفضت إشعارات الأذان');
     }
   };
 
@@ -149,12 +149,12 @@ export default function PrayersPage({ showNotification }) {
     if (!timings) return;
 
     const prayerOrder = [
-      { name: 'Ø§Ù„ÙØ¬Ø±', key: 'Fajr' },
-      { name: 'Ø§Ù„Ø´Ø±ÙˆÙ‚', key: 'Sunrise' },
-      { name: 'Ø§Ù„Ø¸Ù‡Ø±', key: 'Dhuhr' },
-      { name: 'Ø§Ù„Ø¹ØµØ±', key: 'Asr' },
-      { name: 'Ø§Ù„Ù…ØºØ±Ø¨', key: 'Maghrib' },
-      { name: 'Ø§Ù„Ø¹Ø´Ø§Ø¡', key: 'Isha' }
+      { name: 'الفجر', key: 'Fajr' },
+      { name: 'الشروق', key: 'Sunrise' },
+      { name: 'الظهر', key: 'Dhuhr' },
+      { name: 'العصر', key: 'Asr' },
+      { name: 'المغرب', key: 'Maghrib' },
+      { name: 'العشاء', key: 'Isha' }
     ];
 
     const interval = setInterval(() => {
@@ -172,7 +172,7 @@ export default function PrayersPage({ showNotification }) {
         const pDate = new Date();
         pDate.setHours(parseInt(hStr, 10), parseInt(mStr, 10), 0, 0);
 
-        // Check if prayer time is NOW (within 30 seconds window) â€” before rolling to tomorrow
+        // Check if prayer time is NOW (within 30 seconds window) — before rolling to tomorrow
         const diffFromNowMs = pDate.getTime() - now.getTime();
         const diffFromNowSecs = Math.abs(Math.floor(diffFromNowMs / 1000));
         const todayStr = now.toDateString() + '_' + p.key;
@@ -187,13 +187,13 @@ export default function PrayersPage({ showNotification }) {
         const warnKey = todayStr + '_warn';
         if (diffFromNowMs > 0 && diffFromNowMs <= 120000 && diffFromNowMs > 60000 && !adhanPlayedToday[warnKey]) {
           if (Notification.permission === 'granted') {
-            new Notification('ØªÙ†Ø¨ÙŠÙ‡ Ù‚Ø¨Ù„ Ø§Ù„Ø£Ø°Ø§Ù†', {
-              body: `Ø¨Ø§Ù‚ÙŠ Ø¯Ù‚ÙŠÙ‚ØªØ§Ù† Ø¹Ù„Ù‰ Ø£Ø°Ø§Ù† ${p.name}`,
+            new Notification('تنبيه قبل الأذان', {
+              body: `باقي دقيقتان على أذان ${p.name}`,
               icon: '/favicon.svg',
               silent: true
             });
           }
-          showNotification(`â° Ø¨Ø§Ù‚ÙŠ Ø¯Ù‚ÙŠÙ‚ØªØ§Ù† Ø¹Ù„Ù‰ Ø£Ø°Ø§Ù† ${p.name}`);
+          showNotification(`⏰ باقي دقيقتان على أذان ${p.name}`);
           setAdhanPlayedToday(prev => ({ ...prev, [warnKey]: true }));
         }
 
@@ -236,8 +236,8 @@ export default function PrayersPage({ showNotification }) {
   const triggerAdhan = (prayerName) => {
     // Show Notification
     if (Notification.permission === 'granted') {
-      new Notification('Ø­Ø§Ù† Ø§Ù„Ø¢Ù† Ù…ÙˆØ¹Ø¯ Ø§Ù„Ø£Ø°Ø§Ù†', {
-        body: `Ø­Ø§Ù† Ø§Ù„Ø¢Ù† Ù…ÙˆØ¹Ø¯ Ø£Ø°Ø§Ù† ${prayerName} Ø¨ØªÙˆÙ‚ÙŠØªÙƒ Ø§Ù„Ù…Ø­Ù„ÙŠ.`,
+      new Notification('حان الآن موعد الأذان', {
+        body: `حان الآن موعد أذان ${prayerName} بتوقيتك المحلي.`,
         icon: '/favicon.svg'
       });
     }
@@ -246,7 +246,7 @@ export default function PrayersPage({ showNotification }) {
     if (soundEnabled && adhanAudioRef.current) {
       adhanAudioRef.current.currentTime = 0;
       adhanAudioRef.current.play().catch(e => console.log("Adhan audio play blocked:", e));
-      showNotification(`ðŸ•Œ Ø­Ø§Ù† Ø§Ù„Ø¢Ù† Ù…ÙˆØ¹Ø¯ Ø£Ø°Ø§Ù† ${prayerName}`);
+      showNotification(`🕌 حان الآن موعد أذان ${prayerName}`);
     }
   };
 
@@ -254,10 +254,10 @@ export default function PrayersPage({ showNotification }) {
     if (soundEnabled) {
       if (adhanAudioRef.current) adhanAudioRef.current.pause();
       setSoundEnabled(false);
-      showNotification('ØªÙ… ÙƒØªÙ… ØµÙˆØª Ø§Ù„Ø£Ø°Ø§Ù†');
+      showNotification('تم كتم صوت الأذان');
     } else {
       setSoundEnabled(true);
-      showNotification('ØªÙ… ØªÙØ¹ÙŠÙ„ ØµÙˆØª Ø§Ù„Ø£Ø°Ø§Ù†');
+      showNotification('تم تفعيل صوت الأذان');
       // Test audio briefly to unlock audio context
       if (adhanAudioRef.current) {
         adhanAudioRef.current.play().then(() => {
@@ -310,8 +310,8 @@ export default function PrayersPage({ showNotification }) {
       <div className="prayers-page-container">
         <div className="prayers-header">
           <div className="welcome-title">
-            <h1>Ù…ÙˆØ§Ù‚ÙŠØª Ø§Ù„ØµÙ„Ø§Ø© ÙˆØ§Ù„Ù‚Ø¨Ù„Ø©</h1>
-            <p>Ø­Ø¯Ø¯ Ù…ÙˆÙ‚Ø¹Ùƒ Ù„Ø¹Ø±Ø¶ Ù…ÙˆØ§Ø¹ÙŠØ¯ Ø§Ù„Ø£Ø°Ø§Ù† ÙˆØ§ØªØ¬Ø§Ù‡ Ø§Ù„Ù‚Ø¨Ù„Ø© Ø¨Ø¯Ù‚Ø©</p>
+            <h1>مواقيت الصلاة والقبلة</h1>
+            <p>حدد موقعك لعرض مواعيد الأذان واتجاه القبلة بدقة</p>
           </div>
         </div>
 
@@ -319,12 +319,12 @@ export default function PrayersPage({ showNotification }) {
           <div className="setup-icon-wrapper">
             <Compass size={48} className="pulse-icon" />
           </div>
-          <h2>ØªÙØ¹ÙŠÙ„ Ù…ÙˆØ§Ù‚ÙŠØª Ø§Ù„ØµÙ„Ø§Ø© ÙˆØ§Ù„Ù‚Ø¨Ù„Ø©</h2>
+          <h2>تفعيل مواقيت الصلاة والقبلة</h2>
           <p>
-            ÙŠØ­ØªØ§Ø¬ Ø§Ù„ØªØ·Ø¨ÙŠÙ‚ Ù„Ù„ÙˆØµÙˆÙ„ Ø¥Ù„Ù‰ Ù…ÙˆÙ‚Ø¹Ùƒ Ø§Ù„Ø¬ØºØ±Ø§ÙÙŠ Ù„Ø­Ø³Ø§Ø¨ Ù…ÙˆØ§Ù‚ÙŠØª Ø§Ù„Ø£Ø°Ù† Ø§Ù„ÙŠÙˆÙ…ÙŠØ© ÙˆØ§ØªØ¬Ø§Ù‡ Ø§Ù„Ù‚Ø¨Ù„Ø© Ø§Ù„Ø®Ø§Øµ Ø¨Ùƒ Ø¨Ø¯Ù‚Ø© Ù…ØªÙ†Ø§Ù‡ÙŠØ©.
+            يحتاج التطبيق للوصول إلى موقعك الجغرافي لحساب مواقيت الأذن اليومية واتجاه القبلة الخاص بك بدقة متناهية.
           </p>
           <button onClick={requestLocation} className="setup-locate-btn" disabled={loading}>
-            {loading ? 'Ø¬Ø§Ø±ÙŠ ØªØ­Ø¯ÙŠØ¯ Ù…ÙˆÙ‚Ø¹Ùƒ...' : 'ØªØ­Ø¯ÙŠØ« ÙˆØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø¢Ù†'}
+            {loading ? 'جاري تحديد موقعك...' : 'تحديث وتحديد الموقع الآن'}
           </button>
         </div>
       </div>
@@ -336,7 +336,7 @@ export default function PrayersPage({ showNotification }) {
       {/* Geolocation Loading Header */}
       <div className="prayers-header">
         <div className="welcome-title">
-          <h1>Ù…ÙˆØ§Ù‚ÙŠØª Ø§Ù„ØµÙ„Ø§Ø© ÙˆØ§Ù„Ù‚Ø¨Ù„Ø©</h1>
+          <h1>مواقيت الصلاة والقبلة</h1>
           <p className="location-badge">
             <MapPin size={14} />
             <span>{locationName}</span>
@@ -344,7 +344,7 @@ export default function PrayersPage({ showNotification }) {
         </div>
         <div className="header-actions">
           <button onClick={requestLocation} className="option-btn active" disabled={loading}>
-            {loading ? 'Ø¬Ø§Ø±ÙŠ Ø§Ù„ØªØ­Ø¯ÙŠØ«...' : 'ØªØ­Ø¯ÙŠØ« Ø§Ù„Ù…ÙˆÙ‚Ø¹'}
+            {loading ? 'جاري التحديث...' : 'تحديث الموقع'}
           </button>
         </div>
       </div>
@@ -357,14 +357,14 @@ export default function PrayersPage({ showNotification }) {
           {nextPrayer && (
             <div className="next-prayer-widget">
               <div className="next-prayer-details">
-                <span className="next-prayer-label">Ø§Ù„ØµÙ„Ø§Ø© Ø§Ù„Ù‚Ø§Ø¯Ù…Ø©: {nextPrayer.name}</span>
+                <span className="next-prayer-label">الصلاة القادمة: {nextPrayer.name}</span>
                 <span className="next-prayer-countdown">{timeRemaining}</span>
               </div>
               <div className="next-prayer-preferences">
-                <button onClick={requestNotificationPermission} className="circle-btn" title="ØªÙØ¹ÙŠÙ„ Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª">
+                <button onClick={requestNotificationPermission} className="circle-btn" title="تفعيل الإشعارات">
                   {notificationPermission === 'granted' ? <Bell size={18} className="glow-icon" /> : <BellOff size={18} />}
                 </button>
-                <button onClick={toggleSound} className="circle-btn" title="ÙƒØªÙ…/ØªÙØ¹ÙŠÙ„ ØµÙˆØª Ø§Ù„Ø£Ø°Ø§Ù†">
+                <button onClick={toggleSound} className="circle-btn" title="كتم/تفعيل صوت الأذان">
                   {soundEnabled ? <Volume2 size={18} className="glow-icon" /> : <VolumeX size={18} />}
                 </button>
               </div>
@@ -375,12 +375,12 @@ export default function PrayersPage({ showNotification }) {
           {timings ? (
             <div className="timings-grid">
               {[
-                { name: 'Ø§Ù„ÙØ¬Ø±', key: 'Fajr', icon: Clock },
-                { name: 'Ø§Ù„Ø´Ø±ÙˆÙ‚', key: 'Sunrise', icon: Clock },
-                { name: 'Ø§Ù„Ø¸Ù‡Ø±', key: 'Dhuhr', icon: Clock },
-                { name: 'Ø§Ù„Ø¹ØµØ±', key: 'Asr', icon: Clock },
-                { name: 'Ø§Ù„Ù…ØºØ±Ø¨', key: 'Maghrib', icon: Clock },
-                { name: 'Ø§Ù„Ø¹Ø´Ø§Ø¡', key: 'Isha', icon: Clock }
+                { name: 'الفجر', key: 'Fajr', icon: Clock },
+                { name: 'الشروق', key: 'Sunrise', icon: Clock },
+                { name: 'الظهر', key: 'Dhuhr', icon: Clock },
+                { name: 'العصر', key: 'Asr', icon: Clock },
+                { name: 'المغرب', key: 'Maghrib', icon: Clock },
+                { name: 'العشاء', key: 'Isha', icon: Clock }
               ].map((p) => {
                 const isNext = nextPrayer && nextPrayer.name === p.name;
                 return (
@@ -397,7 +397,7 @@ export default function PrayersPage({ showNotification }) {
           ) : (
             <div className="empty-state">
               <Clock size={40} />
-              <h3>Ø¬Ø§Ø±ÙŠ ØªØ­Ù…ÙŠÙ„ Ù…ÙˆØ§Ù‚ÙŠØª Ø§Ù„ØµÙ„Ø§Ø©...</h3>
+              <h3>جاري تحميل مواقيت الصلاة...</h3>
             </div>
           )}
         </div>
@@ -405,11 +405,11 @@ export default function PrayersPage({ showNotification }) {
         {/* Qibla Direction Compass Card */}
         <div className="qibla-card-section">
           <div className="qibla-info-header">
-            <h3>ØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ù‚Ø¨Ù„Ø©</h3>
+            <h3>تحديد القبلة</h3>
             {qiblaDirection !== null ? (
-              <p className="qibla-angle-text">Ø²Ø§ÙˆÙŠØ© Ø§Ù„Ù‚Ø¨Ù„Ø©: {qiblaDirection}Â° Ù…Ù† Ø§Ù„Ø´Ù…Ø§Ù„</p>
+              <p className="qibla-angle-text">زاوية القبلة: {qiblaDirection}° من الشمال</p>
             ) : (
-              <p className="qibla-angle-text">Ø¬Ø§Ø±ÙŠ Ø­Ø³Ø§Ø¨ Ø§Ù„Ø²Ø§ÙˆÙŠØ©...</p>
+              <p className="qibla-angle-text">جاري حساب الزاوية...</p>
             )}
           </div>
 
@@ -461,7 +461,7 @@ export default function PrayersPage({ showNotification }) {
           
           {!isMobileCompass && qiblaDirection !== null && (
             <p className="qibla-guide-hint">
-              Ø§Ø³Ø­Ø¨ Ø§Ù„Ø¨ÙˆØµÙ„Ø© Ù„ØªØ¯ÙˆÙŠØ±Ù‡Ø§ ÙˆÙ…Ø­Ø§ÙƒØ§Ø© Ø§Ù„Ø§ØªØ¬Ø§Ù‡ Ø§Ù„ÙØ¹Ù„ÙŠ Ù„Ù„Ù‚Ø¨Ù„Ø©.
+              اسحب البوصلة لتدويرها ومحاكاة الاتجاه الفعلي للقبلة.
             </p>
           )}
         </div>
@@ -470,4 +470,3 @@ export default function PrayersPage({ showNotification }) {
     </div>
   );
 }
-

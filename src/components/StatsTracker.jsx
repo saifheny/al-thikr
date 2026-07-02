@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Award, BookOpen, CheckCircle, Heart, Trophy, Target, Zap, Star } from 'lucide-react';
 
 export default function StatsTracker({ surahs, favorites = [], memorized = [], readHadiths = [], onToggleMemorized, onSelectSurah, setTab }) {
