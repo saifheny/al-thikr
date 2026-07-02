@@ -177,7 +177,6 @@ export async function fetchAyahTafsir(ayahNumber) {
   return result.data.text;
 }
 
-/* ── Offline Caching Service (Cache API) ── */
 const CACHE_NAME = 'althikr-audio-cache-v1';
 
 export async function checkSurahCached(ayahs) {

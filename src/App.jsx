@@ -10,7 +10,6 @@ import PrayersPage from './components/PrayersPage';
 import HadithPage from './components/HadithPage';
 import OnboardingTour from './components/OnboardingTour';
 
-
 export default function App() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
@@ -43,7 +42,7 @@ export default function App() {
   const [downloadProgress, setDownloadProgress] = useState(null);
   const [cachedSurahNums, setCachedSurahNums] = useState(() => JSON.parse(localStorage.getItem('cachedSurahs') || '[]'));
 
-  const [tafsirData, setTafsirData] = useState(null); // null means closed, otherwise { ayah, text, loading }
+  const [tafsirData, setTafsirData] = useState(null); 
   const [showTour, setShowTour] = useState(() => !localStorage.getItem('tourCompleted'));
 
   const audioRef = useRef(new Audio());
@@ -56,8 +55,7 @@ export default function App() {
       setShowInstallPrompt(true);
     };
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    
-    // Auto prompt every 3 minutes if not installed
+
     const interval = setInterval(() => {
       if (window.matchMedia('(display-mode: browser)').matches) {
         setShowInstallPrompt(true);
@@ -205,7 +203,7 @@ export default function App() {
   const handleToggleLoopSurah = () => { setIsLoopSurah(p => !p); if (!isLoopSurah) setIsLoopAyah(false); showNotification(!isLoopSurah ? 'تكرار السورة فعّال' : 'إلغاء تكرار السورة'); };
   const handleToggleLoopAyah = () => { setIsLoopAyah(p => !p); if (!isLoopAyah) setIsLoopSurah(false); showNotification(!isLoopAyah ? 'تكرار الآية فعّال' : 'إلغاء تكرار الآية'); };
   const handleAyahClick = (index) => { setActiveAyahIndex(index); setIsPlaying(true); };
-  
+
   const handleClosePlayer = () => {
     setIsPlaying(false);
     audioRef.current.pause();
@@ -221,12 +219,11 @@ export default function App() {
     try {
       showNotification(`جاري تحميل سورة ${activeSurah.name.replace('سُورَةُ ', '')} للاستماع دون اتصال...`);
       setDownloadProgress({ current: 0, total: activeSurah.ayahs.length, surahNum: activeSurah.number });
-      
+
       await cacheSurahAudio(activeSurah.ayahs, (current, total) => {
         setDownloadProgress({ current, total, surahNum: activeSurah.number });
       });
 
-      // Save to list of cached surahs
       setCachedSurahNums(prev => {
         const next = prev.includes(activeSurah.number) ? prev : [...prev, activeSurah.number];
         localStorage.setItem('cachedSurahs', JSON.stringify(next));
@@ -266,7 +263,7 @@ export default function App() {
     if (!activeSurah) return;
     const ayah = activeSurah.ayahs[activeAyahIndex];
     if (!ayah?.audio) return;
-    
+
     let active = true;
     (async () => {
       const src = await getCachedAudioUrl(ayah.audio);
@@ -277,7 +274,7 @@ export default function App() {
       audioRef.current.playbackRate = speed;
       if (isPlaying) audioRef.current.play().catch(() => {});
     })();
-    
+
     return () => {
       active = false;
     };
@@ -288,7 +285,6 @@ export default function App() {
     else audioRef.current.pause();
   }, [isPlaying]);
 
-  // Auto-scroll to active ayah in reader
   useEffect(() => {
     const el = document.getElementById(`ayah-${activeAyahIndex}`);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -335,7 +331,6 @@ export default function App() {
         </div>
       )}
 
-      {/* Desktop Sidebar */}
       {!isMobile && (
         <nav className="sidebar">
           <div>
@@ -357,7 +352,6 @@ export default function App() {
         </nav>
       )}
 
-      {/* Main content */}
       <main className="main-content">
         {loading && <div className="loading-bar"><span className="spinner" /> جاري التحميل...</div>}
         {notification && <div className="notification"><Bell size={13} /><span>{notification}</span></div>}
@@ -418,7 +412,6 @@ export default function App() {
         )}
       </main>
 
-      {/* Mobile Bottom Nav */}
       {isMobile && tab !== 'hadith' && (
         <nav className="mobile-bottom-nav">
           {navItems.map(n => {
@@ -434,9 +427,6 @@ export default function App() {
         </nav>
       )}
 
-
-
-      {/* Tafsir Modal */}
       {tafsirData && (
         <div className="tafsir-overlay" onClick={() => setTafsirData(null)}>
           <div className="tafsir-modal" onClick={(e) => e.stopPropagation()}>

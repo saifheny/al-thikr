@@ -54,8 +54,7 @@ export default function Dashboard({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      
-      {/* Radio Widget */}
+
       <div style={{ background: 'linear-gradient(135deg, var(--sage-glow), rgba(123, 181, 149, 0.05))', borderRadius: '14px', padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid var(--border)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div style={{ background: 'var(--sage)', color: 'white', padding: '0.8rem', borderRadius: '50%', display: 'flex' }}>

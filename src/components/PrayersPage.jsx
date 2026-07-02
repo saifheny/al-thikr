@@ -12,10 +12,9 @@ export default function PrayersPage({ showNotification }) {
   const [nextPrayer, setNextPrayer] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState('');
   const [qiblaDirection, setQiblaDirection] = useState(null);
-  const [compassHeading, setCompassHeading] = useState(0); // device heading from north
+  const [compassHeading, setCompassHeading] = useState(0); 
   const [isMobileCompass, setIsMobileCompass] = useState(false);
-  
-  // Audio & Notification Preferences
+
   const [notificationPermission, setNotificationPermission] = useState(
     typeof window !== 'undefined' ? Notification.permission : 'default'
   );
@@ -24,7 +23,6 @@ export default function PrayersPage({ showNotification }) {
 
   const adhanAudioRef = useRef(null);
 
-  // Initialize Adhan Audio
   useEffect(() => {
     adhanAudioRef.current = new Audio('https://download.quranicaudio.com/adhan/adhan_makkah_ali_mulla.mp3');
     adhanAudioRef.current.preload = 'auto';
@@ -35,7 +33,6 @@ export default function PrayersPage({ showNotification }) {
     };
   }, []);
 
-  // Request Location & Load from Cache if exists, otherwise request automatically
   useEffect(() => {
     const cachedCoords = localStorage.getItem('user_coords');
     if (cachedCoords) {
@@ -75,7 +72,7 @@ export default function PrayersPage({ showNotification }) {
   const fetchPrayers = async (lat, lng) => {
     setLoading(true);
     try {
-      // Fetch timings using Umm al-Qura method (method=4)
+
       const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4`);
       if (!res.ok) throw new Error('Failed to fetch timings');
       const data = await res.json();
@@ -92,7 +89,6 @@ export default function PrayersPage({ showNotification }) {
     }
   };
 
-  // Calculate Qibla bearing
   const calculateQibla = (lat, lng) => {
     const phiUser = (lat * Math.PI) / 180;
     const lambdaUser = (lng * Math.PI) / 180;
@@ -106,16 +102,14 @@ export default function PrayersPage({ showNotification }) {
 
     let qiblaRad = Math.atan2(y, x);
     let qiblaDeg = (qiblaRad * 180) / Math.PI;
-    
-    // Normalize to 0-360
+
     qiblaDeg = (qiblaDeg + 360) % 360;
     setQiblaDirection(Math.round(qiblaDeg));
   };
 
-  // Check device orientation for compass
   useEffect(() => {
     const handleOrientation = (e) => {
-      // webkitCompassHeading is iOS specific, alpha is standard (but needs absolute or calibration)
+
       const heading = e.webkitCompassHeading || (360 - e.alpha);
       if (heading !== undefined && heading !== null) {
         setCompassHeading(Math.round(heading));
@@ -129,7 +123,6 @@ export default function PrayersPage({ showNotification }) {
     };
   }, []);
 
-  // Request notifications permission
   const requestNotificationPermission = async () => {
     if (!('Notification' in window)) {
       showNotification('متصفحك لا يدعم إشعارات سطح المكتب');
@@ -144,7 +137,6 @@ export default function PrayersPage({ showNotification }) {
     }
   };
 
-  // Prayer calculations & alarms loop
   useEffect(() => {
     if (!timings) return;
 
@@ -160,7 +152,6 @@ export default function PrayersPage({ showNotification }) {
     const interval = setInterval(() => {
       const now = new Date();
 
-      // Find next prayer
       let foundNext = null;
       let minDiff = Infinity;
       let nextName = '';
@@ -172,18 +163,15 @@ export default function PrayersPage({ showNotification }) {
         const pDate = new Date();
         pDate.setHours(parseInt(hStr, 10), parseInt(mStr, 10), 0, 0);
 
-        // Check if prayer time is NOW (within 30 seconds window) — before rolling to tomorrow
         const diffFromNowMs = pDate.getTime() - now.getTime();
         const diffFromNowSecs = Math.abs(Math.floor(diffFromNowMs / 1000));
         const todayStr = now.toDateString() + '_' + p.key;
 
-        // Trigger at exact time (within 30s window)
         if (diffFromNowSecs < 30 && diffFromNowMs >= -30000 && !adhanPlayedToday[todayStr]) {
           triggerAdhan(p.name);
           setAdhanPlayedToday(prev => ({ ...prev, [todayStr]: true }));
         }
 
-        // Trigger 2-minute warning notification
         const warnKey = todayStr + '_warn';
         if (diffFromNowMs > 0 && diffFromNowMs <= 120000 && diffFromNowMs > 60000 && !adhanPlayedToday[warnKey]) {
           if (Notification.permission === 'granted') {
@@ -197,7 +185,6 @@ export default function PrayersPage({ showNotification }) {
           setAdhanPlayedToday(prev => ({ ...prev, [warnKey]: true }));
         }
 
-        // For finding next prayer: if already passed today, roll to tomorrow
         let diff = pDate.getTime() - now.getTime();
         if (diff <= 0) {
           pDate.setDate(pDate.getDate() + 1);
@@ -213,18 +200,17 @@ export default function PrayersPage({ showNotification }) {
 
       if (foundNext) {
         setNextPrayer({ name: nextName, time: foundNext });
-        
-        // Format remaining time
+
         const diffMs = foundNext.getTime() - now.getTime();
         const totalSecs = Math.floor(diffMs / 1000);
         const hrs = Math.floor(totalSecs / 3600);
         const mins = Math.floor((totalSecs % 3600) / 60);
         const secs = totalSecs % 60;
-        
+
         const hrsStr = hrs.toString().padStart(2, '0');
         const minsStr = mins.toString().padStart(2, '0');
         const secsStr = secs.toString().padStart(2, '0');
-        
+
         setTimeRemaining(`${hrsStr}:${minsStr}:${secsStr}`);
       }
 
@@ -234,7 +220,7 @@ export default function PrayersPage({ showNotification }) {
   }, [timings, adhanPlayedToday, soundEnabled]);
 
   const triggerAdhan = (prayerName) => {
-    // Show Notification
+
     if (Notification.permission === 'granted') {
       new Notification('حان الآن موعد الأذان', {
         body: `حان الآن موعد أذان ${prayerName} بتوقيتك المحلي.`,
@@ -242,7 +228,6 @@ export default function PrayersPage({ showNotification }) {
       });
     }
 
-    // Play Adhan Audio
     if (soundEnabled && adhanAudioRef.current) {
       adhanAudioRef.current.currentTime = 0;
       adhanAudioRef.current.play().catch(e => console.log("Adhan audio play blocked:", e));
@@ -258,7 +243,7 @@ export default function PrayersPage({ showNotification }) {
     } else {
       setSoundEnabled(true);
       showNotification('تم تفعيل صوت الأذان');
-      // Test audio briefly to unlock audio context
+
       if (adhanAudioRef.current) {
         adhanAudioRef.current.play().then(() => {
           adhanAudioRef.current.pause();
@@ -268,13 +253,12 @@ export default function PrayersPage({ showNotification }) {
     }
   };
 
-  // Manual rotation for desktop compass simulation
   const [manualRotation, setManualRotation] = useState(0);
   const isDragging = useRef(false);
   const startAngle = useRef(0);
 
   const handleCompassStart = (e) => {
-    if (isMobileCompass) return; // Use real sensor
+    if (isMobileCompass) return; 
     isDragging.current = true;
     const rect = e.currentTarget.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
@@ -301,8 +285,7 @@ export default function PrayersPage({ showNotification }) {
   };
 
   const activeHeading = isMobileCompass ? compassHeading : -manualRotation;
-  // Qibla relative to North adjusted for compass heading
-  // Qibla arrow angle relative to screen = qiblaDirection - heading
+
   const arrowRotation = qiblaDirection !== null ? (qiblaDirection - activeHeading + 360) % 360 : 0;
 
   if (!coords) {
@@ -333,7 +316,7 @@ export default function PrayersPage({ showNotification }) {
 
   return (
     <div className="prayers-page-container">
-      {/* Geolocation Loading Header */}
+
       <div className="prayers-header">
         <div className="welcome-title">
           <h1>مواقيت الصلاة والقبلة</h1>
@@ -350,10 +333,9 @@ export default function PrayersPage({ showNotification }) {
       </div>
 
       <div className="prayers-content-grid">
-        
-        {/* Adhan Timings Card */}
+
         <div className="adhan-card-section">
-          {/* Next Prayer Countdown Widget */}
+
           {nextPrayer && (
             <div className="next-prayer-widget">
               <div className="next-prayer-details">
@@ -371,7 +353,6 @@ export default function PrayersPage({ showNotification }) {
             </div>
           )}
 
-          {/* Timings List */}
           {timings ? (
             <div className="timings-grid">
               {[
@@ -402,7 +383,6 @@ export default function PrayersPage({ showNotification }) {
           )}
         </div>
 
-        {/* Qibla Direction Compass Card */}
         <div className="qibla-card-section">
           <div className="qibla-info-header">
             <h3>تحديد القبلة</h3>
@@ -424,7 +404,7 @@ export default function PrayersPage({ showNotification }) {
             onTouchEnd={handleCompassEnd}
             style={{ cursor: isMobileCompass ? 'default' : 'grab' }}
           >
-            {/* The Compass Dial */}
+
             <div 
               className="compass-dial"
               style={{ transform: `rotate(${-activeHeading}deg)` }}
@@ -436,7 +416,6 @@ export default function PrayersPage({ showNotification }) {
               <div className="compass-ticks"></div>
             </div>
 
-            {/* Qibla Pointer pointing to Kaaba */}
             {qiblaDirection !== null && (
               <div 
                 className="qibla-pointer"
@@ -452,13 +431,12 @@ export default function PrayersPage({ showNotification }) {
                 </div>
               </div>
             )}
-            
-            {/* Inner Glass Center */}
+
             <div className="compass-center-cap">
               <Compass size={28} className="center-compass-icon" />
             </div>
           </div>
-          
+
           {!isMobileCompass && qiblaDirection !== null && (
             <p className="qibla-guide-hint">
               اسحب البوصلة لتدويرها ومحاكاة الاتجاه الفعلي للقبلة.

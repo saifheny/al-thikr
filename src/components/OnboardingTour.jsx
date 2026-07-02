@@ -53,7 +53,7 @@ export default function OnboardingTour({ onComplete }) {
         <button className="tour-close-btn" onClick={onComplete}>
           <X size={20} />
         </button>
-        
+
         <div className="tour-content">
           <div className="tour-icon-wrap">
             <Icon size={40} color="var(--sage)" />

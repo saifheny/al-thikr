@@ -21,7 +21,6 @@ export default function HadithPage({ onBack, readHadiths = [], onMarkRead }) {
     loadHadith();
   }, []);
 
-  // Correct placement of the hook (before early returns)
   useEffect(() => {
     if (hadiths.length > 0 && onMarkRead) {
       const currentHadith = hadiths[currentIndex];

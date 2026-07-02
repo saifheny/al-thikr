@@ -23,7 +23,6 @@ export default function StatsTracker({ surahs, favorites = [], memorized = [], r
         <p>تابع تقدمك في التلاوة والحفظ وقراءة الأحاديث</p>
       </div>
 
-      {/* Stats row */}
       <div className="stats-row">
         <div className="stat-chip green">
           <Award size={18} />
@@ -51,7 +50,6 @@ export default function StatsTracker({ surahs, favorites = [], memorized = [], r
         </div>
       </div>
 
-      {/* Badges */}
       <div>
         <h3 className="section-title" style={{ fontFamily: 'Tajawal, sans-serif' }}><Star size={16} /> الأوسمة</h3>
         <div className="badges-row">
@@ -66,7 +64,6 @@ export default function StatsTracker({ surahs, favorites = [], memorized = [], r
         </div>
       </div>
 
-      {/* Memorized list */}
       <div>
         <h3 className="section-title" style={{ fontFamily: 'Tajawal, sans-serif' }}><CheckCircle size={16} color="var(--accent-sage)" /> السور المحفوظة</h3>
         {memSurahs.length === 0 ? (

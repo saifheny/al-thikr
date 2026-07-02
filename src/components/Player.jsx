@@ -5,15 +5,13 @@ import {
   Heart, BookmarkCheck, X, Sparkles
 } from 'lucide-react';
 
-// Pre-computed static wavy path — the wave never moves, only the knob & fill moves
 function WavyProgress({ progressPct, duration, currentTime, onSeek }) {
   const containerRef = useRef(null);
-  const W = 280; // SVG internal width
+  const W = 280; 
   const H = 28;
   const amplitude = 4;
   const frequency = 0.055;
 
-  // Build a static wave path once
   const wavePath = useMemo(() => {
     let d = `M0,${H / 2}`;
     for (let x = 0; x <= W; x += 2) {
@@ -23,7 +21,6 @@ function WavyProgress({ progressPct, duration, currentTime, onSeek }) {
     return d;
   }, []);
 
-  // Compute knob position along the wave
   const fillWidth = (progressPct / 100) * W;
   const knobY = H / 2 + Math.sin(fillWidth * frequency) * amplitude;
 
@@ -50,12 +47,12 @@ function WavyProgress({ progressPct, duration, currentTime, onSeek }) {
               <rect x="0" y="0" width={fillWidth} height={H} />
             </clipPath>
           </defs>
-          {/* Background track */}
+
           <path d={wavePath} stroke="var(--progress-track)" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-          {/* Filled portion */}
+
           <path d={wavePath} stroke="var(--accent-sage)" strokeWidth="3.5" fill="none"
             strokeLinecap="round" clipPath="url(#waveClip)" />
-          {/* Knob — only this moves */}
+
           {fillWidth > 2 && (
             <circle cx={fillWidth} cy={knobY} r="5.5" fill="var(--accent-sage-dark)" />
           )}
@@ -129,22 +126,22 @@ export default function Player({
               <Download size={22} />
             </button>
           )}
-          
+
           <button className="ctrl-btn" onClick={onPrev}>
             <SkipBack size={compact ? 26 : 26} fill="currentColor" />
           </button>
-          
+
           <button className="ctrl-btn play-btn" onClick={onPlayPause}
             style={{ width: compact ? 60 : 58, height: compact ? 60 : 58 }}>
             {isPlaying
               ? <Pause size={26} fill="currentColor" />
               : <Play size={26} fill="currentColor" style={{ marginLeft: 2 }} />}
           </button>
-          
+
           <button className="ctrl-btn" onClick={onNext}>
             <SkipForward size={compact ? 26 : 26} fill="currentColor" />
           </button>
-          
+
           <div style={{ position: 'relative' }}>
             <button className={`ctrl-btn ${(isLoopSurah || isLoopAyah) ? 'active' : ''}`}
               onClick={() => setShowSpeedMenu(s => !s)}>
@@ -221,7 +218,7 @@ export default function Player({
     return (
       <div className="mobile-player-view">
         <div className="mobile-player-compact">
-          {/* Mobile Header with Close Button */}
+
           <div className="mobile-player-header">
             <button className="mobile-close-btn" onClick={onClose} title="إغلاق المشغل">
               <X size={18} />
@@ -229,20 +226,16 @@ export default function Player({
             <span className="mobile-player-status">المشغل الحالي</span>
           </div>
 
-          {/* Surah info */}
           <div className="mobile-surah-info">
             <h2 className="mobile-surah-arabic">{activeSurah.name.replace('سُورَةُ ', '')}</h2>
             <span className="mobile-surah-english">{activeSurah.englishName} · سورة {activeSurah.number}</span>
           </div>
 
-          {/* Mushaf Illustration */}
           <MushafIllustration size={180} isPlaying={isPlaying} />
 
-          {/* Reciter */}
           <div className="mobile-reciter-chip">{activeReciter.name}</div>
 
-          {/* Controls */}
-          <Controls compact={true} />          {/* Action pills */}
+          <Controls compact={true} />          
           <div className="mobile-actions-row">
             <button className={`action-pill ${showTranslation ? 'active' : ''}`} onClick={() => setShowTranslation(v => !v)}>
               <Languages size={16} /> ترجمة
@@ -255,14 +248,12 @@ export default function Player({
             </button>
           </div>
 
-          {/* Swipe hint — pinned above bottom nav */}
           <button className="swipe-hint-btn" onClick={() => setSheetOpen(true)}>
             <ChevronUp size={20} className="bounce-icon" />
             <span>المصحف</span>
           </button>
         </div>
 
-        {/* Expanded Reader (Mobile sliding sheet) */}
         <div className={`mobile-reader-expanded ${sheetOpen ? 'open' : ''}`}>
           <div className="mobile-reader-topbar">
             <button className="circle-btn" onClick={() => setSheetOpen(false)}>
@@ -284,7 +275,6 @@ export default function Player({
     );
   }
 
-  /* ── DESKTOP WIDGET ── */
   return (
     <div className="desktop-player-widget">
       <div className="player-widget-header">
@@ -293,9 +283,9 @@ export default function Player({
         </button>
         <span className="widget-status-text">تلاوة نشطة</span>
       </div>
-      
+
       <MushafIllustration size={150} isPlaying={isPlaying} />
-      
+
       <div className="widget-surah-info">
         <h2 className="widget-surah-title">
           {activeSurah.name.replace('سُورَةُ ', '')}
@@ -305,9 +295,9 @@ export default function Player({
         </span>
         <div className="widget-reciter-name">{activeReciter.name}</div>
       </div>
-      
+
       <Controls compact={false} />
-      
+
       <div className="widget-actions-row">
         <button className={`action-pill ${showTranslation ? 'active' : ''}`} onClick={() => setShowTranslation(v => !v)}>
           <Languages size={15} /> ترجمة
