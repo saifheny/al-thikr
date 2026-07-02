@@ -444,7 +444,7 @@ export default function App() {
       </main>
 
     {/* Mobile Bottom Nav */}
-    {isMobile && tab !== 'hadith' && tab !== 'player' && (
+    {isMobile && tab !== 'hadith' && (
       <nav className="mobile-bottom-nav">
           {navItems.map(n => {
             const active = tab === n.key;
@@ -496,4 +496,5 @@ export default function App() {
     </div>
   );
 }
+
 

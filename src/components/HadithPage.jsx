@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 
 export default function HadithPage({ onBack, readHadiths = [], onMarkRead }) {
@@ -21,6 +21,16 @@ export default function HadithPage({ onBack, readHadiths = [], onMarkRead }) {
     loadHadith();
   }, []);
 
+  // Correct placement of the hook (before early returns)
+  useEffect(() => {
+    if (hadiths.length > 0 && onMarkRead) {
+      const currentHadith = hadiths[currentIndex];
+      if (currentHadith) {
+        onMarkRead(currentHadith.hadithnumber);
+      }
+    }
+  }, [currentIndex, hadiths, onMarkRead]);
+
   const handleNext = () => {
     if (currentIndex < hadiths.length - 1) setCurrentIndex(prev => prev + 1);
   };
@@ -35,12 +45,12 @@ export default function HadithPage({ onBack, readHadiths = [], onMarkRead }) {
         <div className="hadith-topbar">
           <button className="hadith-back-btn" onClick={onBack}>
             <ArrowRight size={20} />
-            <span>Ø±Ø¬ÙˆØ¹</span>
+            <span>رجوع</span>
           </button>
         </div>
         <div className="empty-state">
           <Loader2 className="spin" size={32} style={{ color: 'var(--sage)', marginBottom: 15 }} />
-          <p>Ø¬Ø§Ø±ÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø£Ø­Ø§Ø¯ÙŠØ«...</p>
+          <p>جاري تحميل الأحاديث...</p>
         </div>
       </div>
     );
@@ -52,24 +62,17 @@ export default function HadithPage({ onBack, readHadiths = [], onMarkRead }) {
         <div className="hadith-topbar">
           <button className="hadith-back-btn" onClick={onBack}>
             <ArrowRight size={20} />
-            <span>Ø±Ø¬ÙˆØ¹</span>
+            <span>رجوع</span>
           </button>
         </div>
         <div className="empty-state">
-          <p>Ù„Ù… Ù†ØªÙ…ÙƒÙ† Ù…Ù† ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø£Ø­Ø§Ø¯ÙŠØ« Ø­Ø§Ù„ÙŠØ§Ù‹.</p>
+          <p>لم نتمكن من تحميل الأحاديث حالياً.</p>
         </div>
       </div>
     );
   }
 
   const currentHadith = hadiths[currentIndex];
-
-  useEffect(() => {
-    if (currentHadith && onMarkRead) {
-      onMarkRead(currentHadith.hadithnumber);
-    }
-  }, [currentHadith, onMarkRead]);
-
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === hadiths.length - 1;
 
@@ -78,30 +81,29 @@ export default function HadithPage({ onBack, readHadiths = [], onMarkRead }) {
       <div className="hadith-topbar">
         <button className="hadith-back-btn" onClick={onBack}>
           <ArrowRight size={20} />
-          <span>Ø±Ø¬ÙˆØ¹</span>
+          <span>رجوع</span>
         </button>
         <div className="hadith-topbar-title">
-          <span>Ø§Ù„Ø£Ø±Ø¨Ø¹ÙˆÙ† Ø§Ù„Ù†ÙˆÙˆÙŠØ©</span>
+          <span>الأربعون النووية</span>
         </div>
         <span className="hadith-counter">{currentIndex + 1} / {hadiths.length}</span>
       </div>
 
       <div className="hadith-body">
-        <div className="hadith-badge">Ø§Ù„Ø­Ø¯ÙŠØ« {currentHadith.hadithnumber}</div>
+        <div className="hadith-badge">الحديث {currentHadith.hadithnumber}</div>
         <p className="hadith-text">{currentHadith.text}</p>
       </div>
 
       <div className="hadith-nav-bar">
         <button className="hadith-nav-btn prev" onClick={handlePrev} disabled={isFirst}>
           <ChevronRight size={22} />
-          <span>Ø§Ù„Ø³Ø§Ø¨Ù‚</span>
+          <span>السابق</span>
         </button>
         <button className="hadith-nav-btn next" onClick={handleNext} disabled={isLast}>
-          <span>Ø§Ù„Ø­Ø¯ÙŠØ« Ø§Ù„ØªØ§Ù„ÙŠ</span>
+          <span>الحديث التالي</span>
           <ChevronLeft size={22} />
         </button>
       </div>
     </div>
   );
 }
-
